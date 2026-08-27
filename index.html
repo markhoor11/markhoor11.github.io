@@ -1,231 +1,294 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
-    <title>Markhor 11 - Hub</title>
-    <!-- Tailwind CSS -->
-    <script src="https://cdn.tailwindcss.com"></script>
-    <style>
-        html, body {
-            background-color: #0b0b0c;
-            color: #F2F2F7;
-            font-family: -apple-system, BlinkMacSystemFont, "SF Pro Display", "SF Pro Text", "Segoe UI", Roboto, sans-serif;
-            touch-action: manipulation;
-            overscroll-behavior-y: none;
-            -webkit-tap-highlight-color: transparent;
-            margin: 0; padding: 0; height: 100%;
-        }
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Apple Liquid Glass Media Player</title>
+  <style>
+    :root {
+      --glass-bg: rgba(255, 255, 255, 0.18);
+      --glass-border: rgba(255, 255, 255, 0.35);
+      --glass-shine: rgba(255, 255, 255, 0.5);
+      --glass-shadow: 0 30px 60px rgba(0, 0, 0, 0.3);
+      --text-main: #ffffff;
+      --text-sub: rgba(255, 255, 255, 0.7);
+    }
 
-        /* Apple-Only Dynamic Liquid Glass Effect */
-        .apple-liquid-glass {
-            background: rgba(28, 28, 30, 0.65);
-            backdrop-filter: blur(30px) saturate(200%);
-            -webkit-backdrop-filter: blur(30px) saturate(200%);
-            border: 1px solid rgba(255, 255, 255, 0.15);
-            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5), inset 0 1px 0 rgba(255, 255, 255, 0.2);
-        }
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+      font-family: -apple-system, BlinkMacSystemFont, "SF Pro Display", "SF Pro Text", "Helvetica Neue", sans-serif;
+      -webkit-font-smoothing: antialiased;
+    }
 
-        /* Fallback Glass for Non-Apple Devices */
-        .fallback-glass {
-            background: #161618;
-            border: 1px solid rgba(255, 255, 255, 0.08);
-            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.4);
-        }
+    body {
+      min-height: 100vh;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      /* Vibrant animated gradient mesh to show off glass translucency */
+      background: radial-gradient(circle at 10% 20%, #ff4b2b, transparent 40%),
+                  radial-gradient(circle at 90% 80%, #ff416c, transparent 40%),
+                  radial-gradient(circle at 50% 50%, #8a2387, #e94057, #f27121);
+      background-size: 150% 150%;
+      overflow: hidden;
+    }
 
-        .dynamic-glass {
-            /* Handled via JavaScript device check */
-        }
+    /* AUTHENTIC APPLE LIQUID GLASS CONTAINER */
+    .glass-card {
+      width: 420px;
+      padding: 28px;
+      border-radius: 32px;
+      background: var(--glass-bg);
+      
+      /* Apple Vibrancy Engine Simulation */
+      backdrop-filter: blur(35px) saturate(200%);
+      -webkit-backdrop-filter: blur(35px) saturate(200%);
 
-        .action-btn {
-            transition: all 0.2s cubic-bezier(0.25, 1, 0.5, 1);
-        }
-        .action-btn:active {
-            transform: scale(0.96);
-            opacity: 0.85;
-        }
+      /* Multi-layered Glass Lighting */
+      border: 1px solid var(--glass-border);
+      box-shadow: 
+        var(--glass-shadow),
+        inset 0 1.5px 1px var(--glass-shine),
+        inset 0 -1px 1px rgba(0, 0, 0, 0.1);
+      
+      position: relative;
+      overflow: hidden;
+      color: var(--text-main);
+    }
 
-        .editing-active .editable-field {
-            outline: 2px dashed #34C759 !important;
-            background-color: rgba(52, 199, 89, 0.1) !important;
-            border-radius: 6px;
-        }
+    /* Specular Reflection Overlay */
+    .glass-card::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      height: 40%;
+      background: linear-gradient(
+        180deg, 
+        rgba(255, 255, 255, 0.15) 0%, 
+        rgba(255, 255, 255, 0) 100%
+      );
+      pointer-events: none;
+      border-top-left-radius: 32px;
+      border-top-right-radius: 32px;
+    }
 
-        ::-webkit-scrollbar { width: 0px; }
-    </style>
+    /* ARTWORK DISPLAY */
+    .artwork-container {
+      position: relative;
+      width: 100%;
+      aspect-ratio: 1;
+      border-radius: 20px;
+      overflow: hidden;
+      box-shadow: 0 15px 35px rgba(0, 0, 0, 0.35);
+      margin-bottom: 24px;
+    }
+
+    .artwork-container img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+    }
+
+    /* TRACK METADATA */
+    .track-info {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 20px;
+    }
+
+    .track-title {
+      font-size: 20px;
+      font-weight: 600;
+      letter-spacing: -0.4px;
+    }
+
+    .track-artist {
+      font-size: 14px;
+      color: var(--text-sub);
+      margin-top: 4px;
+    }
+
+    /* TIMELINE / PROGRESS SLIDER */
+    .progress-container {
+      margin-bottom: 24px;
+    }
+
+    .progress-bar {
+      width: 100%;
+      height: 6px;
+      background: rgba(255, 255, 255, 0.25);
+      border-radius: 3px;
+      position: relative;
+      cursor: pointer;
+      overflow: hidden;
+    }
+
+    .progress-fill {
+      width: 42%;
+      height: 100%;
+      background: #ffffff;
+      border-radius: 3px;
+    }
+
+    .time-labels {
+      display: flex;
+      justify-content: space-between;
+      font-size: 12px;
+      color: var(--text-sub);
+      margin-top: 8px;
+    }
+
+    /* CONTROLS */
+    .controls {
+      display: flex;
+      justify-content: space-around;
+      align-items: center;
+      margin-bottom: 28px;
+    }
+
+    .btn {
+      background: none;
+      border: none;
+      cursor: pointer;
+      color: #ffffff;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transition: transform 0.15s ease, opacity 0.15s ease;
+    }
+
+    .btn:hover {
+      transform: scale(1.08);
+      opacity: 0.9;
+    }
+
+    .btn-play {
+      width: 56px;
+      height: 56px;
+      border-radius: 50%;
+      background: rgba(255, 255, 255, 0.9);
+      color: #000;
+      box-shadow: 0 8px 20px rgba(0, 0, 0, 0.2);
+    }
+
+    /* ACTIVE LISTENING PLAYERS LIST */
+    .players-section {
+      border-top: 1px solid rgba(255, 255, 255, 0.15);
+      padding-top: 16px;
+    }
+
+    .players-header {
+      font-size: 12px;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 0.8px;
+      color: var(--text-sub);
+      margin-bottom: 12px;
+    }
+
+    .player-row {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 6px 0;
+    }
+
+    .player-profile {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .avatar {
+      width: 32px;
+      height: 32px;
+      border-radius: 50%;
+      border: 1px solid rgba(255, 255, 255, 0.4);
+    }
+
+    .player-name {
+      font-size: 13px;
+      font-weight: 500;
+    }
+
+    .status-badge {
+      font-size: 11px;
+      padding: 3px 8px;
+      border-radius: 12px;
+      background: rgba(255, 255, 255, 0.2);
+      backdrop-filter: blur(10px);
+    }
+  </style>
 </head>
-<body class="bg-[#0b0b0c] text-gray-100 flex justify-center h-screen overflow-hidden select-none antialiased">
+<body>
 
-    <!-- Mobile Screen Frame Container -->
-    <div class="w-full max-w-[410px] bg-[#0b0b0c] h-full flex flex-col relative sm:border-x sm:border-white/10 shadow-2xl">
-
-        <!-- Header -->
-        <header class="shrink-0 z-50 px-5 pt-4 pb-3 flex items-center justify-between border-b border-white/5" id="app-header">
-            <div class="flex items-center space-x-3">
-                <div class="w-9 h-9 rounded-xl bg-[#2c2c2e] border border-white/10 flex items-center justify-center text-[#34C759] font-bold text-xs shadow-inner">
-                    M11
-                </div>
-                <div>
-                    <h1 class="font-bold text-white tracking-tight text-sm">MARKHOR <span class="text-[#34C759]">11</span></h1>
-                    <p class="text-[10px] text-gray-400 font-medium tracking-wide">Command Center</p>
-                </div>
-            </div>
-            
-            <div class="flex items-center gap-2">
-                <button type="button" onclick="toggleEditMode()" id="edit-btn" class="action-btn bg-[#2c2c2e] text-white text-[11px] font-semibold px-3.5 py-1.5 rounded-full border border-white/10">
-                    Edit
-                </button>
-            </div>
-        </header>
-
-        <!-- Main Body -->
-        <main class="flex-1 px-4 py-4 space-y-4 overflow-y-auto pb-24">
-
-            <!-- Next Match Fixture Card -->
-            <section class="glass-card rounded-2xl p-4 relative overflow-hidden transition-all">
-                <div class="flex justify-between items-center mb-2">
-                    <span class="text-[10px] font-bold text-[#34C759] uppercase tracking-wider bg-[#34C759]/15 px-2.5 py-1 rounded-full border border-[#34C759]/20">Active Fixture</span>
-                    <span id="match-date" contenteditable="false" class="editable-field text-[11px] text-gray-400 font-medium px-1">SAT, OCT 26 @ 7 PM</span>
-                </div>
-                <h2 id="match-title" contenteditable="false" class="editable-field text-base font-extrabold text-white tracking-tight my-2 px-1">MARKHOR 11 vs DUBAI STRIKERS</h2>
-                <button type="button" onclick="syncCalendar()" class="action-btn w-full block text-center bg-white text-black font-semibold text-xs py-3 rounded-xl mt-3 shadow-md">
-                    Sync to Google Calendar
-                </button>
-            </section>
-
-            <!-- Squad Quick Grid -->
-            <section>
-                <div class="flex justify-between items-center mb-2.5 px-1">
-                    <h3 class="text-[11px] text-gray-400 font-semibold uppercase tracking-wider">Lineup Roster</h3>
-                    <span id="sync-status" class="text-[10px] text-[#34C759] font-medium">Synced with Backend</span>
-                </div>
-
-                <div class="grid grid-cols-2 gap-3">
-                    <div class="glass-card rounded-2xl p-3 flex flex-col justify-between h-32">
-                        <div>
-                            <h4 contenteditable="false" class="editable-field font-bold text-xs text-white truncate">Ahmed Khan</h4>
-                            <p contenteditable="false" class="editable-field text-[9px] text-[#34C759] font-medium mt-0.5">CAPTAIN • Batsman</p>
-                        </div>
-                        <div class="text-[9px] text-gray-400 font-mono">ID: #01</div>
-                    </div>
-                    <div class="glass-card rounded-2xl p-3 flex flex-col justify-between h-32">
-                        <div>
-                            <h4 contenteditable="false" class="editable-field font-bold text-xs text-white truncate">Raj Patel</h4>
-                            <p contenteditable="false" class="editable-field text-[9px] text-[#34C759] font-medium mt-0.5">VICE-CAPTAIN • Bowler</p>
-                        </div>
-                        <div class="text-[9px] text-gray-400 font-mono">ID: #02</div>
-                    </div>
-                </div>
-            </section>
-
-            <!-- WhatsApp Control Panel -->
-            <section class="glass-card rounded-2xl p-4 space-y-3">
-                <div class="text-[10px] font-bold text-gray-400 uppercase tracking-wider">WhatsApp Broadcast Engine</div>
-                <input type="text" id="wa-title" value="MARKHOR 11 vs DUBAI STRIKERS" class="w-full bg-[#1c1c1e] border border-white/10 rounded-xl px-3 py-2.5 text-white text-xs focus:outline-none focus:border-[#34C759]">
-                <button type="button" onclick="sendWhatsApp()" class="action-btn w-full bg-[#34C759] text-black font-bold text-xs py-3 rounded-xl flex items-center justify-center gap-2">
-                    Send Broadcast Alert
-                </button>
-            </section>
-
-        </main>
+  <div class="glass-card">
+    <!-- Album Artwork -->
+    <div class="artwork-container">
+      <img src="https://images.unsplash.com/photo-1618005182384-a83a8bd57fbe?q=80&w=800&auto=format&fit=crop" alt="Album Art">
     </div>
 
-    <script>
-        let isEditing = false;
-        
-        // --- 1. Apple-Only Liquid Glass Detector ---
-        window.addEventListener('DOMContentLoaded', () => {
-            const isApple = /iPad|iPhone|iPod|Macintosh/.test(navigator.userAgent) && !window.MSStream;
-            const glassElements = document.querySelectorAll('.glass-card, header');
-            
-            glassElements.forEach(el => {
-                if (isApple) {
-                    el.classList.add('apple-liquid-glass');
-                } else {
-                    el.classList.add('fallback-glass');
-                }
-            });
+    <!-- Track Information -->
+    <div class="track-info">
+      <div>
+        <div class="track-title">Midnight Resonance</div>
+        <div class="track-artist">Aura & The Echoes</div>
+      </div>
+      <button class="btn" style="opacity: 0.7;">
+        <svg width="22" height="22" fill="currentColor" viewBox="0 0 24 24"><path d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z"/></svg>
+      </button>
+    </div>
 
-            loadFromBackend();
-        });
+    <!-- Timeline Progress -->
+    <div class="progress-container">
+      <div class="progress-bar">
+        <div class="progress-fill"></div>
+      </div>
+      <div class="time-labels">
+        <span>1:42</span>
+        <span>3:55</span>
+      </div>
+    </div>
 
-        // --- 2. Edit & Backend Persistence Controller ---
-        function toggleEditMode() {
-            isEditing = !isEditing;
-            const fields = document.querySelectorAll('.editable-field');
-            const btn = document.getElementById('edit-btn');
-            const body = document.body;
+    <!-- Media Controls -->
+    <div class="controls">
+      <button class="btn">
+        <svg width="24" height="24" fill="currentColor" viewBox="0 0 24 24"><path d="M6 6h2v12H6zm3.5 6l8.5 6V6z"/></svg>
+      </button>
+      <button class="btn btn-play">
+        <svg width="24" height="24" fill="currentColor" viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg>
+      </button>
+      <button class="btn">
+        <svg width="24" height="24" fill="currentColor" viewBox="0 0 24 24"><path d="M16 18h2V6h-2zm-11.5-6l8.5 6V6z"/></svg>
+      </button>
+    </div>
 
-            fields.forEach(el => el.contentEditable = isEditing ? "true" : "false");
+    <!-- Connected Players / Listeners List -->
+    <div class="players-section">
+      <div class="players-header">Listening Together</div>
+      
+      <div class="player-row">
+        <div class="player-profile">
+          <img class="avatar" src="https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=100&auto=format&fit=crop" alt="User 1">
+          <span class="player-name">Alex Rivera</span>
+        </div>
+        <span class="status-badge">Host</span>
+      </div>
 
-            if (isEditing) {
-                btn.textContent = "Save Changes";
-                btn.style.backgroundColor = '#34C759';
-                btn.style.color = '#000';
-                body.classList.add('editing-active');
-            } else {
-                btn.textContent = "Edit";
-                btn.style.backgroundColor = '#2c2c2e';
-                btn.style.color = '#fff';
-                body.classList.remove('editing-active');
-                
-                pushDataToBackend();
-            }
-        }
+      <div class="player-row">
+        <div class="player-profile">
+          <img class="avatar" src="https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=100&auto=format&fit=crop" alt="User 2">
+          <span class="player-name">Marcus Chen</span>
+        </div>
+        <span class="status-badge" style="opacity:0.7;">Synced</span>
+      </div>
+    </div>
+  </div>
 
-        // Simulating Backend Integration (Replace URL with your server endpoint, e.g., Node.js / Firebase)
-        const BACKEND_API_URL = "https://your-backend-server.com/api/update-data";
-
-        async function pushDataToBackend() {
-            const data = {
-                matchTitle: document.getElementById('match-title').innerHTML,
-                matchDate: document.getElementById('match-date').innerHTML,
-                timestamp: new Date().toISOString()
-            };
-
-            // Save locally as backup
-            localStorage.setItem('m11_data', JSON.stringify(data));
-
-            document.getElementById('sync-status').textContent = "Saving to Server...";
-            
-            try {
-                // If you deploy a backend service, uncomment below:
-                /*
-                await fetch(BACKEND_API_URL, {
-                    method: 'POST',
-                    headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify(data)
-                });
-                */
-                setTimeout(() => {
-                    document.getElementById('sync-status').textContent = "Synced with Backend";
-                }, 600);
-            } catch (e) {
-                document.getElementById('sync-status').textContent = "Saved Locally (Offline)";
-            }
-        }
-
-        async function loadFromBackend() {
-            // Pulls latest saved state from storage or backend server
-            const saved = localStorage.getItem('m11_data');
-            if (saved) {
-                const data = JSON.parse(saved);
-                if(data.matchTitle) document.getElementById('match-title').innerHTML = data.matchTitle;
-                if(data.matchDate) document.getElementById('match-date').innerHTML = data.matchDate;
-                if(data.matchTitle) document.getElementById('wa-title').value = data.matchTitle.replace(/<[^>]*>?/gm, '');
-            }
-        }
-
-        function syncCalendar() {
-            const title = document.getElementById('match-title').textContent.trim();
-            const date = document.getElementById('match-date').textContent.trim();
-            window.open(`https://calendar.google.com/calendar/render?action=TEMPLATE&text=${encodeURIComponent(title)}&details=${encodeURIComponent(date)}`, '_blank');
-        }
-
-        function sendWhatsApp() {
-            const text = document.getElementById('wa-title').value;
-            window.location.href = `https://wa.me/?text=${encodeURIComponent("🏏 MARKHOR 11 UPDATE: " + text)}`;
-        }
-    </script>
 </body>
 </html>
