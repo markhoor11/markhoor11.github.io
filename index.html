@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
-    <title>Markhor 11 - Full Squad Hub</title>
+    <title>Markhor 11 - CricHeroes Squad Hub</title>
     <!-- Tailwind CSS -->
     <script src="https://cdn.tailwindcss.com"></script>
     <style>
@@ -111,7 +111,7 @@
         <header class="glass-panel shrink-0 z-50 px-5 pt-4 pb-3 flex items-center justify-between border-b border-white/10 rounded-b-3xl">
             <div class="flex items-center space-x-3">
                 <div class="relative group cursor-pointer" onclick="triggerFileUpload('team-logo-file')">
-                    <img id="team-logo" src="image_1.jpeg" class="w-10 h-10 rounded-[14px] object-cover border border-white/20 shadow-md">
+                    <img id="team-logo" src="https://s3.ap-south-1.amazonaws.com/cricheroes-media/team_logo/default_team.png" class="w-10 h-10 rounded-[14px] object-cover border border-white/20 shadow-md bg-zinc-900">
                     <div class="avatar-overlay absolute inset-0 bg-black/60 rounded-[14px] items-center justify-center text-[8px] font-bold text-white hidden">EDIT</div>
                     <input type="file" id="team-logo-file" class="hidden" accept="image/*" onchange="previewImage(event, 'team-logo')">
                 </div>
@@ -148,7 +148,7 @@
                     <a href="https://chshare.link/team/kXAWAd" target="_blank" rel="noopener noreferrer" class="action-btn block text-center bg-[#FF6600] text-white font-bold text-xs py-3 rounded-2xl shadow-lg hover:bg-[#e65c00]">
                         Open CricHeroes 🏏
                     </a>
-                    <button type="button" onclick="syncCricHeroesData()" id="sync-btn" class="action-btn bg-white/10 backdrop-blur-md text-white font-bold text-xs py-3 rounded-2xl border border-white/20 flex justify-center items-center gap-1.5">
+                    <button type="button" onclick="renderAllPlayers()" id="sync-btn" class="action-btn bg-white/10 backdrop-blur-md text-white font-bold text-xs py-3 rounded-2xl border border-white/20 flex justify-center items-center gap-1.5">
                         <svg id="sync-icon" class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15"></path></svg>
                         <span>Refresh Data</span>
                     </button>
@@ -217,30 +217,31 @@
 
     <script>
         let isEditing = false;
-        const defaultImages = ['image_1.jpeg', 'image_2.jpeg', 'image_3.jpeg', 'image_4.jpeg', 'image_5.jpeg'];
+        const CRICHEROES_AVATAR = 'https://s3.ap-south-1.amazonaws.com/cricheroes-media/user_profile/default_profile.png';
+        const CRICHEROES_LOGO = 'https://s3.ap-south-1.amazonaws.com/cricheroes-media/team_logo/default_team.png';
 
         let teamState = {
             matchDate: "SAT, OCT 26 @ 7 PM",
             matchTitle: "MARKHOR 11 <br><span class=\"text-gray-400 font-semibold text-lg\">vs DUBAI STRIKERS</span>",
-            teamLogo: "image_1.jpeg",
+            teamLogo: CRICHEROES_LOGO,
             apiUrl: "https://chshare.link/team/kXAWAd",
             starting: [
-                { id: 1, name: "Ahmed Khan", role: "BATSMAN", stat: "SKILL: 85%", avatar: "image_1.jpeg" },
-                { id: 2, name: "Raj Patel", role: "BOWLER", stat: "PWR: 92", avatar: "image_2.jpeg" },
-                { id: 3, name: "Baved Khan", role: "ALL-RND", stat: "ACC: 70%", avatar: "image_3.jpeg" },
-                { id: 4, name: "Boko Khan", role: "FIELDER", stat: "DEF: 88", avatar: "image_4.jpeg" },
-                { id: 5, name: "Bahjai Khan", role: "BATSMAN", stat: "AVG: 35.2", avatar: "image_5.jpeg" },
-                { id: 6, name: "Rajned Khan", role: "CAPTAIN", stat: "FORM: 90", avatar: "image_1.jpeg", isCaptain: true },
-                { id: 7, name: "Shah Hussain", role: "BATSMAN", stat: "S/R: 145", avatar: "image_2.jpeg" },
-                { id: 8, name: "Amir Hamza", role: "BOWLER", stat: "WCKTS: 18", avatar: "image_3.jpeg" },
-                { id: 9, name: "Ibrahim Kishawra", role: "ALL-RND", stat: "ECON: 6.2", avatar: "image_4.jpeg" },
-                { id: 10, name: "Izaz Ahmad", role: "WK-BAT", stat: "CATCHES: 12", avatar: "image_5.jpeg" },
-                { id: 11, name: "Khalid Mehmood", role: "BATSMAN", stat: "AVG: 41.0", avatar: "image_1.jpeg" }
+                { id: 1, name: "Ahmed Khan", role: "BATSMAN", stat: "SKILL: 85%", avatar: CRICHEROES_AVATAR },
+                { id: 2, name: "Raj Patel", role: "BOWLER", stat: "PWR: 92", avatar: CRICHEROES_AVATAR },
+                { id: 3, name: "Baved Khan", role: "ALL-RND", stat: "ACC: 70%", avatar: CRICHEROES_AVATAR },
+                { id: 4, name: "Boko Khan", role: "FIELDER", stat: "DEF: 88", avatar: CRICHEROES_AVATAR },
+                { id: 5, name: "Bahjai Khan", role: "BATSMAN", stat: "AVG: 35.2", avatar: CRICHEROES_AVATAR },
+                { id: 6, name: "Rajned Khan", role: "CAPTAIN", stat: "FORM: 90", avatar: CRICHEROES_AVATAR, isCaptain: true },
+                { id: 7, name: "Shah Hussain", role: "BATSMAN", stat: "S/R: 145", avatar: CRICHEROES_AVATAR },
+                { id: 8, name: "Amir Hamza", role: "BOWLER", stat: "WCKTS: 18", avatar: CRICHEROES_AVATAR },
+                { id: 9, name: "Ibrahim Kishawra", role: "ALL-RND", stat: "ECON: 6.2", avatar: CRICHEROES_AVATAR },
+                { id: 10, name: "Izaz Ahmad", role: "WK-BAT", stat: "CATCHES: 12", avatar: CRICHEROES_AVATAR },
+                { id: 11, name: "Khalid Mehmood", role: "BATSMAN", stat: "AVG: 41.0", avatar: CRICHEROES_AVATAR }
             ],
             extraPlayers: [
-                { id: 12, name: "Rizwan Khan", role: "BOWLER", stat: "PACE: 135k", avatar: "image_2.jpeg" },
-                { id: 13, name: "Wajid Ali", role: "ALL-RND", stat: "FORM: 82%", avatar: "image_3.jpeg" },
-                { id: 14, name: "Wajid Derai", role: "FIELDER", stat: "DEF: 91", avatar: "image_4.jpeg" }
+                { id: 12, name: "Rizwan Khan", role: "BOWLER", stat: "PACE: 135k", avatar: CRICHEROES_AVATAR },
+                { id: 13, name: "Wajid Ali", role: "ALL-RND", stat: "FORM: 82%", avatar: CRICHEROES_AVATAR },
+                { id: 14, name: "Wajid Derai", role: "FIELDER", stat: "DEF: 91", avatar: CRICHEROES_AVATAR }
             ]
         };
 
@@ -273,7 +274,7 @@
                     ${isCaptain ? '<div class="absolute inset-0 bg-gradient-to-br from-[#34C759]/10 to-transparent pointer-events-none"></div>' : ''}
                     <div class="flex justify-between items-start z-10">
                         <div class="relative cursor-pointer" onclick="triggerFileUpload('file-${index}')">
-                            <img id="p${index}-avatar" src="${p.avatar}" class="w-12 h-12 rounded-full object-cover border-2 ${isCaptain ? 'border-[#34C759]' : 'border-white/20'} shadow-md">
+                            <img id="p${index}-avatar" src="${p.avatar || CRICHEROES_AVATAR}" class="w-12 h-12 rounded-full object-cover border-2 ${isCaptain ? 'border-[#34C759]' : 'border-white/20'} shadow-md bg-zinc-900">
                             <div class="avatar-overlay absolute inset-0 bg-black/60 rounded-full items-center justify-center text-[9px] font-bold text-white hidden">PHOTO</div>
                             <input type="file" id="file-${index}" class="hidden" accept="image/*" onchange="previewPlayerImage(event, ${index}, ${isExtra})">
                         </div>
@@ -292,13 +293,12 @@
 
         function addExtraPlayer() {
             const newId = teamState.starting.length + teamState.extraPlayers.length + 1;
-            const randomImg = defaultImages[(newId - 1) % defaultImages.length];
             teamState.extraPlayers.push({
                 id: newId,
                 name: `Extra Player ${teamState.extraPlayers.length + 1}`,
                 role: "BENCH",
                 stat: "READY",
-                avatar: randomImg
+                avatar: CRICHEROES_AVATAR
             });
             saveDataToStorage();
             renderAllPlayers();
@@ -355,6 +355,18 @@
                 } else if (isExtra) {
                     teamState.extraPlayers[index - 12].avatar = e.target.result;
                 }
+                saveDataToStorage();
+            };
+            reader.readAsDataURL(file);
+        }
+
+        function previewImage(event, elementId) {
+            const file = event.target.files[0];
+            if (!file) return;
+            const reader = new FileReader();
+            reader.onload = function(e) {
+                document.getElementById(elementId).src = e.target.result;
+                teamState.teamLogo = e.target.result;
                 saveDataToStorage();
             };
             reader.readAsDataURL(file);
