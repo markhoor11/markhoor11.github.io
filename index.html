@@ -4,34 +4,50 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>Markhor 11 - Match Hub</title>
-    <script src="[https://cdn.tailwindcss.com](https://cdn.tailwindcss.com)"></script>
+    <!-- Tailwind CSS CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+    
     <script>
-        tailwind.config = {
-            theme: {
-                extend: {
-                    colors: {
-                        markhorGreen: '#00FF66',
-                        markhorEmerald: '#10B981',
-                        bgBase: '#050505',
-                        bgCard: '#0C0C0C',
-                        borderSubtle: '#1A1A1A'
-                    },
-                    fontFamily: {
-                        sans: ['Inter', 'system-ui', 'sans-serif'],
+        if (window.tailwind) {
+            tailwind.config = {
+                theme: {
+                    extend: {
+                        colors: {
+                            markhorGreen: '#00FF66',
+                            markhorEmerald: '#10B981',
+                            bgBase: '#050505',
+                            bgCard: '#0C0C0C',
+                            borderSubtle: '#1A1A1A'
+                        }
                     }
                 }
             }
         }
     </script>
     <style>
-        /* Mobile-exclusive viewport locks */
+        /* Standalone Fallback Styles (Guarantees layout renders if CDN fails) */
+        :root {
+            --markhorGreen: #00FF66;
+            --markhorEmerald: #10B981;
+            --bgBase: #050505;
+            --bgCard: #0C0C0C;
+            --borderSubtle: #1A1A1A;
+        }
+
         html, body {
+            background-color: #000000;
+            color: #e5e7eb;
+            font-family: system-ui, -apple-system, sans-serif;
             touch-action: manipulation;
             overscroll-behavior-y: none;
             -webkit-tap-highlight-color: transparent;
+            margin: 0;
+            padding: 0;
+            height: 100%;
         }
 
-        /* Prevent iOS auto-zoom on input focus by keeping font size at 16px */
+        /* Prevent mobile input auto-zoom */
         input, select, textarea {
             font-size: 16px !important;
         }
@@ -40,65 +56,67 @@
         .glass-header { backdrop-filter: blur(12px); -webkit-backdrop-filter: blur(12px); }
         .chart-circle { transform: rotate(-90deg); transform-origin: 50% 50%; }
         
-        /* Edit state styling */
         .editing-active .editable-text {
-            border-bottom: 1px dashed #00FF66;
+            border-bottom: 1px dashed var(--markhorGreen);
             background: rgba(0, 255, 102, 0.05);
         }
     </style>
 </head>
-<body class="bg-black text-gray-200 flex justify-center h-screen overflow-hidden font-sans select-none antialiased">
+<body class="bg-black text-gray-200 flex justify-center h-screen overflow-hidden select-none antialiased">
 
     <!-- Mobile Shell Container -->
-    <div class="w-full max-w-[420px] bg-bgBase h-full flex flex-col relative border-x border-borderSubtle">
+    <div class="w-full max-w-[420px] bg-[#050505] h-full flex flex-col relative border-x border-[#1A1A1A]">
 
         <!-- Fixed Top Navigation Header -->
-        <header class="shrink-0 z-50 bg-bgBase/90 glass-header border-b border-borderSubtle px-5 py-3.5 flex items-center justify-between">
+        <header class="shrink-0 z-50 bg-[#050505]/90 glass-header border-b border-[#1A1A1A] px-5 py-3.5 flex items-center justify-between">
             <div class="flex items-center space-x-3">
-                <div class="w-8 h-8 rounded bg-bgCard border border-markhorGreen/50 flex items-center justify-center text-markhorGreen font-bold text-xs tracking-tighter">
-                    M11
+                <div class="relative w-9 h-9 shrink-0">
+                    <img id="app-logo" src="logo.jpeg" alt="Logo" class="w-9 h-9 rounded-lg bg-[#0C0C0C] border border-[#00FF66]/50 object-cover" onerror="this.classList.add('hidden'); document.getElementById('logo-fallback').classList.remove('hidden'); document.getElementById('logo-fallback').classList.add('flex');">
+                    <div id="logo-fallback" class="hidden w-9 h-9 rounded-lg bg-[#0C0C0C] border border-[#00FF66]/50 items-center justify-center text-[#00FF66] font-bold text-xs">
+                        M11
+                    </div>
                 </div>
                 <div>
-                    <h1 class="font-extrabold text-white tracking-widest text-xs">MARKHOR <span class="text-markhorGreen">11</span></h1>
+                    <h1 class="font-extrabold text-white tracking-widest text-xs">MARKHOR <span class="text-[#00FF66]">11</span></h1>
                     <p class="text-[9px] text-gray-500 font-medium uppercase tracking-widest">MCL Mobile App</p>
                 </div>
             </div>
-            <button onclick="toggleEditMode()" id="edit-toggle-btn" class="bg-borderSubtle hover:bg-zinc-800 text-gray-300 text-[9px] font-bold uppercase tracking-widest px-3 py-1.5 rounded transition border border-gray-800">
+            <button onclick="toggleEditMode()" id="edit-toggle-btn" class="bg-[#1A1A1A] hover:bg-zinc-800 text-gray-300 text-[9px] font-bold uppercase tracking-widest px-3 py-1.5 rounded transition border border-gray-800">
                 ✏️ Edit App
             </button>
         </header>
 
-        <!-- Scrollable Main Content -->
+        <!-- Main Content -->
         <main class="flex-1 px-4 py-5 space-y-5 overflow-y-auto pb-20 overscroll-contain">
 
             <!-- Next Match Alert Banner -->
-            <section class="bg-bgCard rounded-xl p-4 border border-borderSubtle relative overflow-hidden">
+            <section class="bg-[#0C0C0C] rounded-xl p-4 border border-[#1A1A1A] relative overflow-hidden">
                 <div class="flex justify-between items-center mb-2">
-                    <span class="text-[9px] font-bold text-markhorGreen uppercase tracking-widest bg-markhorGreen/10 px-2 py-0.5 rounded-sm">Next Fixture</span>
+                    <span class="text-[9px] font-bold text-[#00FF66] uppercase tracking-widest bg-[#00FF66]/10 px-2 py-0.5 rounded-sm">Next Fixture</span>
                     <span id="match-date-display" contenteditable="false" class="editable-text text-[10px] text-gray-400 font-semibold tracking-wide px-1 rounded">SAT, OCT 26 @ 7 PM</span>
                 </div>
                 <h2 id="match-title-display" contenteditable="false" class="editable-text text-sm font-black text-white uppercase tracking-wide my-2 px-1 rounded">MARKHOR 11 vs DUBAI STRIKERS</h2>
-                <a href="[https://calendar.google.com](https://calendar.google.com)" target="_blank" class="w-full block text-center bg-white text-black active:bg-gray-200 font-bold text-[10px] uppercase tracking-widest py-2.5 rounded transition mt-3">
+                <a href="https://calendar.google.com" target="_blank" class="w-full block text-center bg-white text-black active:bg-gray-200 font-bold text-[10px] uppercase tracking-widest py-2.5 rounded transition mt-3">
                     Sync to Google Calendar
                 </a>
             </section>
 
-            <!-- Squad Infographics Grid -->
+            <!-- Squad Roster Grid -->
             <section>
                 <div class="flex justify-between items-center mb-3 px-1">
                     <h3 class="text-[10px] text-gray-500 font-bold uppercase tracking-widest">Squad Roster</h3>
-                    <span id="edit-hint" class="text-[9px] text-markhorGreen hidden animate-pulse">Tap text to edit details</span>
+                    <span id="edit-hint" class="text-[9px] text-[#00FF66] hidden animate-pulse">Tap text to edit details</span>
                 </div>
 
                 <div class="grid grid-cols-2 gap-3">
                     
-                    <!-- Player Card 1 -->
-                    <div class="bg-bgCard border border-borderSubtle rounded-xl p-3 flex flex-col justify-between h-40">
+                    <!-- Player 1 -->
+                    <div class="bg-[#0C0C0C] border border-[#1A1A1A] rounded-xl p-3 flex flex-col justify-between h-40">
                         <div class="flex items-center gap-2">
-                            <img src="image_1.jpeg" alt="Player 1" class="w-9 h-9 rounded bg-black object-cover border border-borderSubtle shrink-0">
+                            <img src="image_1.jpeg" alt="Player 1" class="w-9 h-9 rounded bg-black object-cover border border-[#1A1A1A] shrink-0">
                             <div class="min-w-0 flex-1">
                                 <h4 contenteditable="false" class="editable-text font-bold text-[10px] text-white uppercase truncate rounded">Ahmed Khan</h4>
-                                <p contenteditable="false" class="editable-text text-[8px] text-markhorEmerald mt-0.5 truncate rounded">SKILL: 85%</p>
+                                <p contenteditable="false" class="editable-text text-[8px] text-[#10B981] mt-0.5 truncate rounded">SKILL: 85%</p>
                             </div>
                         </div>
                         <div class="flex justify-between items-end flex-1">
@@ -110,29 +128,29 @@
                         </div>
                     </div>
 
-                    <!-- Player Card 2 -->
-                    <div class="bg-bgCard border border-borderSubtle rounded-xl p-3 flex flex-col justify-between h-40">
+                    <!-- Player 2 -->
+                    <div class="bg-[#0C0C0C] border border-[#1A1A1A] rounded-xl p-3 flex flex-col justify-between h-40">
                         <div class="flex items-center gap-2">
-                            <img src="image_2.jpeg" alt="Player 2" class="w-9 h-9 rounded bg-black object-cover border border-borderSubtle shrink-0">
+                            <img src="image_2.jpeg" alt="Player 2" class="w-9 h-9 rounded bg-black object-cover border border-[#1A1A1A] shrink-0">
                             <div class="min-w-0 flex-1">
                                 <h4 contenteditable="false" class="editable-text font-bold text-[10px] text-white uppercase truncate rounded">Raj Patel</h4>
-                                <p contenteditable="false" class="editable-text text-[8px] text-markhorEmerald mt-0.5 truncate rounded">PWR: 92</p>
+                                <p contenteditable="false" class="editable-text text-[8px] text-[#10B981] mt-0.5 truncate rounded">PWR: 92</p>
                             </div>
                         </div>
                         <div class="flex items-end justify-around flex-1 pb-1">
-                            <div class="flex flex-col items-center gap-1.5"><div class="w-2.5 bg-markhorEmerald h-6 rounded-t-sm opacity-80"></div></div>
-                            <div class="flex flex-col items-center gap-1.5"><div class="w-2.5 bg-markhorGreen h-10 rounded-t-sm opacity-80"></div></div>
+                            <div class="flex flex-col items-center gap-1.5"><div class="w-2.5 bg-[#10B981] h-6 rounded-t-sm opacity-80"></div></div>
+                            <div class="flex flex-col items-center gap-1.5"><div class="w-2.5 bg-[#00FF66] h-10 rounded-t-sm opacity-80"></div></div>
                             <div class="flex flex-col items-center gap-1.5"><div class="w-2.5 bg-white h-8 rounded-t-sm opacity-80"></div></div>
                         </div>
                     </div>
 
-                    <!-- Player Card 3 -->
-                    <div class="bg-bgCard border border-borderSubtle rounded-xl p-3 flex flex-col justify-between h-40">
+                    <!-- Player 3 -->
+                    <div class="bg-[#0C0C0C] border border-[#1A1A1A] rounded-xl p-3 flex flex-col justify-between h-40">
                         <div class="flex items-center gap-2">
-                            <img src="image_3.jpeg" alt="Player 3" class="w-9 h-9 rounded bg-black object-cover border border-borderSubtle shrink-0">
+                            <img src="image_3.jpeg" alt="Player 3" class="w-9 h-9 rounded bg-black object-cover border border-[#1A1A1A] shrink-0">
                             <div class="min-w-0 flex-1">
                                 <h4 contenteditable="false" class="editable-text font-bold text-[10px] text-white uppercase truncate rounded">Baved Khan</h4>
-                                <p contenteditable="false" class="editable-text text-[8px] text-markhorEmerald mt-0.5 truncate rounded">ACC: 70%</p>
+                                <p contenteditable="false" class="editable-text text-[8px] text-[#10B981] mt-0.5 truncate rounded">ACC: 70%</p>
                             </div>
                         </div>
                         <div class="flex items-center justify-between flex-1">
@@ -146,58 +164,58 @@
                         </div>
                     </div>
 
-                    <!-- Player Card 4 -->
-                    <div class="bg-bgCard border border-borderSubtle rounded-xl p-3 flex flex-col justify-between h-40">
+                    <!-- Player 4 -->
+                    <div class="bg-[#0C0C0C] border border-[#1A1A1A] rounded-xl p-3 flex flex-col justify-between h-40">
                         <div class="flex items-center gap-2">
-                            <img src="image_4.jpeg" alt="Player 4" class="w-9 h-9 rounded bg-black object-cover border border-borderSubtle shrink-0">
+                            <img src="image_4.jpeg" alt="Player 4" class="w-9 h-9 rounded bg-black object-cover border border-[#1A1A1A] shrink-0">
                             <div class="min-w-0 flex-1">
                                 <h4 contenteditable="false" class="editable-text font-bold text-[10px] text-white uppercase truncate rounded">Boko Khan</h4>
-                                <p contenteditable="false" class="editable-text text-[8px] text-markhorEmerald mt-0.5 truncate rounded">DEF: 88</p>
+                                <p contenteditable="false" class="editable-text text-[8px] text-[#10B981] mt-0.5 truncate rounded">DEF: 88</p>
                             </div>
                         </div>
                         <div class="flex justify-around items-center flex-1">
-                            <div class="w-6 h-6 bg-borderSubtle rounded flex items-center justify-center text-[10px]">⚔️</div>
-                            <div class="w-6 h-6 bg-borderSubtle rounded flex items-center justify-center text-[10px]">🛡️</div>
-                            <div class="w-6 h-6 bg-borderSubtle rounded flex items-center justify-center text-[10px]">⭐</div>
+                            <div class="w-6 h-6 bg-[#1A1A1A] rounded flex items-center justify-center text-[10px]">⚔️</div>
+                            <div class="w-6 h-6 bg-[#1A1A1A] rounded flex items-center justify-center text-[10px]">🛡️</div>
+                            <div class="w-6 h-6 bg-[#1A1A1A] rounded flex items-center justify-center text-[10px]">⭐</div>
                         </div>
                     </div>
 
-                    <!-- Player Card 5 -->
-                    <div class="bg-bgCard border border-borderSubtle rounded-xl p-3 flex flex-col justify-between h-40">
+                    <!-- Player 5 -->
+                    <div class="bg-[#0C0C0C] border border-[#1A1A1A] rounded-xl p-3 flex flex-col justify-between h-40">
                         <div class="flex items-center gap-2">
-                            <img src="image_5.jpeg" alt="Player 5" class="w-9 h-9 rounded bg-black object-cover border border-borderSubtle shrink-0">
+                            <img src="image_5.jpeg" alt="Player 5" class="w-9 h-9 rounded bg-black object-cover border border-[#1A1A1A] shrink-0">
                             <div class="min-w-0 flex-1">
                                 <h4 contenteditable="false" class="editable-text font-bold text-[10px] text-white uppercase truncate rounded">Bahjai Khan</h4>
-                                <p contenteditable="false" class="editable-text text-[8px] text-markhorEmerald mt-0.5 truncate rounded">AVG: 35.2</p>
+                                <p contenteditable="false" class="editable-text text-[8px] text-[#10B981] mt-0.5 truncate rounded">AVG: 35.2</p>
                             </div>
                         </div>
                         <div class="flex-1 flex flex-col justify-end pb-1 space-y-2">
                             <div class="text-[7px] text-gray-500 uppercase tracking-widest">Performance</div>
-                            <div class="relative w-full h-1 bg-borderSubtle rounded">
-                                <div class="absolute top-0 left-0 h-1 bg-markhorGreen rounded" style="width: 85%;"></div>
+                            <div class="relative w-full h-1 bg-[#1A1A1A] rounded">
+                                <div class="absolute top-0 left-0 h-1 bg-[#00FF66] rounded" style="width: 85%;"></div>
                             </div>
                         </div>
                     </div>
 
-                    <!-- Player Card 6 -->
-                    <div class="bg-bgCard border border-borderSubtle rounded-xl p-3 flex flex-col justify-between h-40">
+                    <!-- Player 6 -->
+                    <div class="bg-[#0C0C0C] border border-[#1A1A1A] rounded-xl p-3 flex flex-col justify-between h-40">
                         <div class="flex items-center gap-2">
-                            <img src="image_6.jpeg" alt="Player 6" class="w-9 h-9 rounded bg-black object-cover border border-borderSubtle shrink-0">
+                            <img src="image_6.jpeg" alt="Player 6" class="w-9 h-9 rounded bg-black object-cover border border-[#1A1A1A] shrink-0">
                             <div class="min-w-0 flex-1">
                                 <h4 contenteditable="false" class="editable-text font-bold text-[10px] text-white uppercase truncate rounded">Rajned Khan</h4>
-                                <p contenteditable="false" class="editable-text text-[8px] text-markhorEmerald mt-0.5 truncate rounded">FORM: 90</p>
+                                <p contenteditable="false" class="editable-text text-[8px] text-[#10B981] mt-0.5 truncate rounded">FORM: 90</p>
                             </div>
                         </div>
                         <div class="grid grid-cols-3 gap-1 flex-1 items-end">
-                            <div class="bg-bgBase border border-borderSubtle p-1 text-center rounded">
+                            <div class="bg-[#050505] border border-[#1A1A1A] p-1 text-center rounded">
                                 <div class="text-white text-[9px] font-bold">25</div>
                                 <div class="text-[5px] text-gray-500 uppercase">Mat</div>
                             </div>
-                            <div class="bg-bgBase border border-borderSubtle p-1 text-center rounded">
-                                <div class="text-markhorGreen text-[9px] font-bold">35</div>
+                            <div class="bg-[#050505] border border-[#1A1A1A] p-1 text-center rounded">
+                                <div class="text-[#00FF66] text-[9px] font-bold">35</div>
                                 <div class="text-[5px] text-gray-500 uppercase">Avg</div>
                             </div>
-                            <div class="bg-bgBase border border-borderSubtle p-1 text-center rounded">
+                            <div class="bg-[#050505] border border-[#1A1A1A] p-1 text-center rounded">
                                 <div class="text-white text-[9px] font-bold">120</div>
                                 <div class="text-[5px] text-gray-500 uppercase">SR</div>
                             </div>
@@ -208,21 +226,21 @@
             </section>
 
             <!-- Admin WhatsApp Broadcast Panel -->
-            <section class="bg-[#080808] border border-borderSubtle rounded-xl p-4 my-4 relative">
+            <section class="bg-[#080808] border border-[#1A1A1A] rounded-xl p-4 my-4 relative">
                 <div class="text-[9px] font-bold text-gray-500 mb-3 uppercase tracking-widest">WhatsApp Rich Broadcast</div>
                 
                 <div class="space-y-3">
                     <div>
                         <label class="text-[9px] text-gray-400 block mb-1">Match Title</label>
-                        <input type="text" id="admin-match-title" value="MARKHOR 11 vs DUBAI STRIKERS" class="w-full bg-black border border-borderSubtle rounded-lg p-3 text-white focus:outline-none focus:border-markhorGreen transition">
+                        <input type="text" id="admin-match-title" value="MARKHOR 11 vs DUBAI STRIKERS" class="w-full bg-black border border-[#1A1A1A] rounded-lg p-3 text-white focus:outline-none focus:border-[#00FF66] transition">
                     </div>
                     <div>
                         <label class="text-[9px] text-gray-400 block mb-1">Match Schedule</label>
-                        <input type="text" id="admin-match-date" value="Sat, Oct 26 @ 7 PM" class="w-full bg-black border border-borderSubtle rounded-lg p-3 text-white focus:outline-none focus:border-markhorGreen transition">
+                        <input type="text" id="admin-match-date" value="Sat, Oct 26 @ 7 PM" class="w-full bg-black border border-[#1A1A1A] rounded-lg p-3 text-white focus:outline-none focus:border-[#00FF66] transition">
                     </div>
                     
-                    <button onclick="broadcastWhatsAppRich()" class="w-full bg-markhorEmerald active:bg-markhorGreen text-black font-extrabold text-[10px] uppercase tracking-widest py-3 rounded-lg transition flex items-center justify-center gap-2 mt-2 shadow-lg">
-                        <svg xmlns="[http://www.w3.org/2000/svg](http://www.w3.org/2000/svg)" width="14" height="14" viewBox="0 0 24 24" fill="currentColor"><path d="M.057 24l1.687-6.163c-1.041-1.804-1.588-3.849-1.587-5.946.003-6.556 5.338-11.891 11.893-11.891 3.181.001 6.167 1.24 8.413 3.488 2.245 2.248 3.481 5.236 3.48 8.414-.003 6.557-5.338 11.892-11.893 11.892-1.99-.001-3.951-.5-5.688-1.448l-6.305 1.654zm6.597-3.807c1.676.995 3.276 1.591 5.392 1.592 5.448 0 9.898-4.45 9.898-9.892 0-2.64-1.027-5.119-2.894-6.985-1.864-1.866-4.346-2.895-6.986-2.895-5.452 0-9.898 4.451-9.898 9.892 0 1.954.516 3.82 1.493 5.485l-1.04 3.797 3.935-1.004zm10.741-7.464c-.058-.098-.216-.156-.453-.274-.236-.118-1.399-.691-1.615-.77-.216-.079-.374-.118-.531.118-.157.236-.61 .77-.748.928-.137.157-.275.177-.512.059-.236-.118-1-.368-1.905-1.177-.703-.628-1.177-1.404-1.315-1.64-.138-.236-.015-.364.103-.482.106-.106.236-.275.354-.413.118-.138.157-.236.236-.393.079-.157.039-.295-.02-.413-.059-.118-.531-1.278-.727-1.749-.191-.462-.385-.4-.531-.408-.138-.007-.295-.007-.453-.007-.157 0-.413.059-.629.295-.216.236-.826.806-.826 1.965 0 1.159.846 2.278.964 2.435.118.157 1.66 2.535 4.024 3.555 2.364 1.02 2.364.688 2.797.649.433-.039 1.399-.571 1.595-1.121.197-.55.197-1.023.138-1.121z"/></svg>
+                    <button onclick="broadcastWhatsAppRich()" class="w-full bg-[#10B981] active:bg-[#00FF66] text-black font-extrabold text-[10px] uppercase tracking-widest py-3 rounded-lg transition flex items-center justify-center gap-2 mt-2 shadow-lg">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="currentColor"><path d="M.057 24l1.687-6.163c-1.041-1.804-1.588-3.849-1.587-5.946.003-6.556 5.338-11.891 11.893-11.891 3.181.001 6.167 1.24 8.413 3.488 2.245 2.248 3.481 5.236 3.48 8.414-.003 6.557-5.338 11.892-11.893 11.892-1.99-.001-3.951-.5-5.688-1.448l-6.305 1.654zm6.597-3.807c1.676.995 3.276 1.591 5.392 1.592 5.448 0 9.898-4.45 9.898-9.892 0-2.64-1.027-5.119-2.894-6.985-1.864-1.866-4.346-2.895-6.986-2.895-5.452 0-9.898 4.451-9.898 9.892 0 1.954.516 3.82 1.493 5.485l-1.04 3.797 3.935-1.004zm10.741-7.464c-.058-.098-.216-.156-.453-.274-.236-.118-1.399-.691-1.615-.77-.216-.079-.374-.118-.531.118-.157.236-.61 .77-.748.928-.137.157-.275.177-.512.059-.236-.118-1-.368-1.905-1.177-.703-.628-1.177-1.404-1.315-1.64-.138-.236-.015-.364.103-.482.106-.106.236-.275.354-.413.118-.138.157-.236.236-.393.079-.157.039-.295-.02-.413-.059-.118-.531-1.278-.727-1.749-.191-.462-.385-.4-.531-.408-.138-.007-.295-.007-.453-.007-.157 0-.413.059-.629.295-.216.236-.826.806-.826 1.965 0 1.159.846 2.278.964 2.435.118.157 1.66 2.535 4.024 3.555 2.364 1.02 2.364.688 2.797.649.433-.039 1.399-.571 1.595-1.121.197-.55.197-1.023.138-1.121z"/></svg>
                         Send WhatsApp Box Alert
                     </button>
                 </div>
@@ -231,7 +249,7 @@
         </main>
     </div>
 
-    <!-- Application Controller Logic -->
+    <!-- Application Script -->
     <script>
         let isEditing = false;
 
@@ -248,18 +266,17 @@
 
             if (isEditing) {
                 btn.textContent = "💾 Save Changes";
-                btn.classList.replace('bg-borderSubtle', 'bg-markhorGreen');
-                btn.classList.replace('text-gray-300', 'text-black');
+                btn.style.backgroundColor = '#00FF66';
+                btn.style.color = '#000000';
                 hint.classList.remove('hidden');
                 body.classList.add('editing-active');
             } else {
                 btn.textContent = "✏️ Edit App";
-                btn.classList.replace('bg-markhorGreen', 'bg-borderSubtle');
-                btn.classList.replace('text-black', 'text-gray-300');
+                btn.style.backgroundColor = '#1A1A1A';
+                btn.style.color = '#d1d5db';
                 hint.classList.add('hidden');
                 body.classList.remove('editing-active');
                 
-                // Sync main title with input fields if edited inline
                 document.getElementById('admin-match-title').value = document.getElementById('match-title-display').textContent.trim();
                 document.getElementById('admin-match-date').value = document.getElementById('match-date-display').textContent.trim();
             }
@@ -269,11 +286,9 @@
             const title = document.getElementById('admin-match-title').value || 'MARKHOR 11 FIXTURE';
             const date = document.getElementById('admin-match-date').value || 'TBA';
             
-            // Constructs a structured box/card message using WhatsApp backticks (```)
             const boxTop    = "```┌──────────────────────────────┐```";
             const boxHeader = "```│   🏏 MARKHOR 11 MATCH ALERT  │```";
             const boxDivider= "```├──────────────────────────────┤```";
-            const boxBottom = "```└──────────────────────────────┘```";
             
             const message = `${boxTop}\n${boxHeader}\n${boxDivider}\n\n` +
                             `*FIXTURE:* ${title}\n` +
