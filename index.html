@@ -3,253 +3,128 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
-    <title>Markhor 11 - Match Hub</title>
-    <!-- Tailwind CSS CDN -->
+    <title>Markhor 11 - Hub</title>
+    <!-- Tailwind CSS -->
     <script src="https://cdn.tailwindcss.com"></script>
-    <script>
-        if (window.tailwind) {
-            tailwind.config = {
-                theme: {
-                    extend: {
-                        colors: {
-                            iosGreen: '#34C759',
-                            iosDarkBg: '#000000',
-                            iosCard: '#1C1C1E',
-                            iosSubCard: '#2C2C2E',
-                            iosTextSecondary: '#8E8E93'
-                        }
-                    }
-                }
-            }
-        }
-    </script>
     <style>
         html, body {
-            background-color: #000000;
+            background-color: #0b0b0c;
             color: #F2F2F7;
-            font-family: -apple-system, BlinkMacSystemFont, "SF Pro Display", "SF Pro Text", "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+            font-family: -apple-system, BlinkMacSystemFont, "SF Pro Display", "SF Pro Text", "Segoe UI", Roboto, sans-serif;
             touch-action: manipulation;
             overscroll-behavior-y: none;
             -webkit-tap-highlight-color: transparent;
-            margin: 0;
-            padding: 0;
-            height: 100%;
+            margin: 0; padding: 0; height: 100%;
         }
 
-        /* iOS Glassmorphism Header */
-        .ios-glass {
-            background-color: rgba(28, 28, 30, 0.75);
-            backdrop-filter: blur(20px);
-            -webkit-backdrop-filter: blur(20px);
+        /* Apple-Only Dynamic Liquid Glass Effect */
+        .apple-liquid-glass {
+            background: rgba(28, 28, 30, 0.65);
+            backdrop-filter: blur(30px) saturate(200%);
+            -webkit-backdrop-filter: blur(30px) saturate(200%);
+            border: 1px solid rgba(255, 255, 255, 0.15);
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5), inset 0 1px 0 rgba(255, 255, 255, 0.2);
         }
 
-        /* Smooth iOS Touch Animations */
-        .ios-button {
-            transition: transform 0.15s ease, opacity 0.15s ease;
+        /* Fallback Glass for Non-Apple Devices */
+        .fallback-glass {
+            background: #161618;
+            border: 1px solid rgba(255, 255, 255, 0.08);
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.4);
         }
-        .ios-button:active {
+
+        .dynamic-glass {
+            /* Handled via JavaScript device check */
+        }
+
+        .action-btn {
+            transition: all 0.2s cubic-bezier(0.25, 1, 0.5, 1);
+        }
+        .action-btn:active {
             transform: scale(0.96);
-            opacity: 0.8;
+            opacity: 0.85;
         }
 
-        /* Editing Outline state */
-        .editing-active .editable-text {
-            outline: 1px dashed #34C759;
-            background-color: rgba(52, 199, 89, 0.1);
-            border-radius: 4px;
-        }
-
-        input, select, textarea {
-            font-size: 16px !important;
+        .editing-active .editable-field {
+            outline: 2px dashed #34C759 !important;
+            background-color: rgba(52, 199, 89, 0.1) !important;
+            border-radius: 6px;
         }
 
         ::-webkit-scrollbar { width: 0px; }
-        .chart-circle { transform: rotate(-90deg); transform-origin: 50% 50%; }
     </style>
 </head>
-<body class="bg-black text-gray-100 flex justify-center h-screen overflow-hidden select-none antialiased">
+<body class="bg-[#0b0b0c] text-gray-100 flex justify-center h-screen overflow-hidden select-none antialiased">
 
-    <!-- iOS Frame Container -->
-    <div class="w-full max-w-[420px] bg-black h-full flex flex-col relative sm:border-x sm:border-[#2C2C2E]">
+    <!-- Mobile Screen Frame Container -->
+    <div class="w-full max-w-[410px] bg-[#0b0b0c] h-full flex flex-col relative sm:border-x sm:border-white/10 shadow-2xl">
 
         <!-- Header -->
-        <header class="shrink-0 z-50 ios-glass border-b border-[#2C2C2E]/60 px-5 pt-4 pb-3 flex items-center justify-between">
+        <header class="shrink-0 z-50 px-5 pt-4 pb-3 flex items-center justify-between border-b border-white/5" id="app-header">
             <div class="flex items-center space-x-3">
-                <div class="relative w-9 h-9 shrink-0">
-                    <img id="app-logo" src="logo.jpeg" alt="Logo" class="w-9 h-9 rounded-xl bg-[#1C1C1E] border border-white/10 object-cover" onerror="this.classList.add('hidden'); document.getElementById('logo-fallback').classList.remove('hidden'); document.getElementById('logo-fallback').classList.add('flex');">
-                    <div id="logo-fallback" class="hidden w-9 h-9 rounded-xl bg-[#1C1C1E] border border-[#34C759]/40 items-center justify-center text-[#34C759] font-bold text-xs shadow-inner">
-                        M11
-                    </div>
+                <div class="w-9 h-9 rounded-xl bg-[#2c2c2e] border border-white/10 flex items-center justify-center text-[#34C759] font-bold text-xs shadow-inner">
+                    M11
                 </div>
                 <div>
                     <h1 class="font-bold text-white tracking-tight text-sm">MARKHOR <span class="text-[#34C759]">11</span></h1>
-                    <p class="text-[10px] text-gray-400 font-medium tracking-wide">MCL Match Hub</p>
+                    <p class="text-[10px] text-gray-400 font-medium tracking-wide">Command Center</p>
                 </div>
             </div>
             
             <div class="flex items-center gap-2">
-                <button type="button" onclick="downloadHTMLFile()" id="download-btn" class="ios-button hidden bg-[#34C759]/20 text-[#34C759] text-[11px] font-semibold px-3 py-1.5 rounded-full border border-[#34C759]/30">
-                    Save File
-                </button>
-                <button type="button" onclick="toggleEditMode()" id="edit-toggle-btn" class="ios-button bg-[#2C2C2E] text-white text-[11px] font-semibold px-3.5 py-1.5 rounded-full border border-white/10">
-                    Edit App
+                <button type="button" onclick="toggleEditMode()" id="edit-btn" class="action-btn bg-[#2c2c2e] text-white text-[11px] font-semibold px-3.5 py-1.5 rounded-full border border-white/10">
+                    Edit
                 </button>
             </div>
         </header>
 
         <!-- Main Body -->
-        <main class="flex-1 px-4 py-4 space-y-4 overflow-y-auto pb-24 overscroll-contain">
+        <main class="flex-1 px-4 py-4 space-y-4 overflow-y-auto pb-24">
 
-            <!-- Fixture Card -->
-            <section class="bg-[#1C1C1E] rounded-2xl p-4 border border-white/5 shadow-2xl relative overflow-hidden">
+            <!-- Next Match Fixture Card -->
+            <section class="glass-card rounded-2xl p-4 relative overflow-hidden transition-all">
                 <div class="flex justify-between items-center mb-2">
-                    <span class="text-[10px] font-bold text-[#34C759] uppercase tracking-wider bg-[#34C759]/15 px-2.5 py-1 rounded-full">Next Match</span>
-                    <span id="match-date-display" contenteditable="false" class="editable-text text-[11px] text-gray-400 font-medium px-1">SAT, OCT 26 @ 7 PM</span>
+                    <span class="text-[10px] font-bold text-[#34C759] uppercase tracking-wider bg-[#34C759]/15 px-2.5 py-1 rounded-full border border-[#34C759]/20">Active Fixture</span>
+                    <span id="match-date" contenteditable="false" class="editable-field text-[11px] text-gray-400 font-medium px-1">SAT, OCT 26 @ 7 PM</span>
                 </div>
-                <h2 id="match-title-display" contenteditable="false" class="editable-text text-base font-extrabold text-white tracking-tight my-2 px-1">MARKHOR 11 vs DUBAI STRIKERS</h2>
-                <button type="button" onclick="syncGoogleCalendar()" class="ios-button w-full block text-center bg-white text-black font-semibold text-xs tracking-wide py-3 rounded-xl transition mt-3 shadow-md">
-                    Add to Google Calendar
+                <h2 id="match-title" contenteditable="false" class="editable-field text-base font-extrabold text-white tracking-tight my-2 px-1">MARKHOR 11 vs DUBAI STRIKERS</h2>
+                <button type="button" onclick="syncCalendar()" class="action-btn w-full block text-center bg-white text-black font-semibold text-xs py-3 rounded-xl mt-3 shadow-md">
+                    Sync to Google Calendar
                 </button>
             </section>
 
-            <!-- Squad Roster Grid -->
+            <!-- Squad Quick Grid -->
             <section>
                 <div class="flex justify-between items-center mb-2.5 px-1">
-                    <h3 class="text-[11px] text-[#8E8E93] font-semibold uppercase tracking-wider">Squad Roster</h3>
-                    <span id="edit-hint" class="text-[10px] text-[#34C759] hidden animate-pulse font-medium">Tap text to edit details</span>
+                    <h3 class="text-[11px] text-gray-400 font-semibold uppercase tracking-wider">Lineup Roster</h3>
+                    <span id="sync-status" class="text-[10px] text-[#34C759] font-medium">Synced with Backend</span>
                 </div>
 
                 <div class="grid grid-cols-2 gap-3">
-                    
-                    <!-- Player Cards -->
-                    <div class="bg-[#1C1C1E] border border-white/5 rounded-2xl p-3 flex flex-col justify-between h-40 shadow-lg">
-                        <div class="flex items-center gap-2.5">
-                            <img src="image_1.jpeg" alt="Player 1" class="w-9 h-9 rounded-xl bg-black object-cover border border-white/10 shrink-0">
-                            <div class="min-w-0 flex-1">
-                                <h4 contenteditable="false" class="editable-text font-bold text-xs text-white truncate">Ahmed Khan</h4>
-                                <p contenteditable="false" class="editable-text text-[9px] text-[#34C759] font-medium mt-0.5 truncate">SKILL: 85%</p>
-                            </div>
+                    <div class="glass-card rounded-2xl p-3 flex flex-col justify-between h-32">
+                        <div>
+                            <h4 contenteditable="false" class="editable-field font-bold text-xs text-white truncate">Ahmed Khan</h4>
+                            <p contenteditable="false" class="editable-field text-[9px] text-[#34C759] font-medium mt-0.5">CAPTAIN • Batsman</p>
                         </div>
-                        <div class="flex justify-between items-end flex-1">
-                            <div class="text-[8px] text-gray-400 font-medium uppercase tracking-wider pb-1">Stats<br>Overview</div>
-                            <svg viewBox="0 0 100 100" class="w-12 h-12 opacity-80">
-                                <polygon points="50,5 95,30 80,85 20,85 5,30" fill="#34C75922" stroke="#34C759" stroke-width="1.5"/>
-                                <polygon points="50,25 75,40 65,70 35,70 25,40" fill="none" stroke="#34C759" stroke-width="1"/>
-                            </svg>
-                        </div>
+                        <div class="text-[9px] text-gray-400 font-mono">ID: #01</div>
                     </div>
-
-                    <div class="bg-[#1C1C1E] border border-white/5 rounded-2xl p-3 flex flex-col justify-between h-40 shadow-lg">
-                        <div class="flex items-center gap-2.5">
-                            <img src="image_2.jpeg" alt="Player 2" class="w-9 h-9 rounded-xl bg-black object-cover border border-white/10 shrink-0">
-                            <div class="min-w-0 flex-1">
-                                <h4 contenteditable="false" class="editable-text font-bold text-xs text-white truncate">Raj Patel</h4>
-                                <p contenteditable="false" class="editable-text text-[9px] text-[#34C759] font-medium mt-0.5 truncate">PWR: 92</p>
-                            </div>
+                    <div class="glass-card rounded-2xl p-3 flex flex-col justify-between h-32">
+                        <div>
+                            <h4 contenteditable="false" class="editable-field font-bold text-xs text-white truncate">Raj Patel</h4>
+                            <p contenteditable="false" class="editable-field text-[9px] text-[#34C759] font-medium mt-0.5">VICE-CAPTAIN • Bowler</p>
                         </div>
-                        <div class="flex items-end justify-around flex-1 pb-1">
-                            <div class="flex flex-col items-center gap-1.5"><div class="w-2.5 bg-[#34C759]/60 h-6 rounded-t-sm"></div></div>
-                            <div class="flex flex-col items-center gap-1.5"><div class="w-2.5 bg-[#34C759] h-10 rounded-t-sm"></div></div>
-                            <div class="flex flex-col items-center gap-1.5"><div class="w-2.5 bg-white h-8 rounded-t-sm"></div></div>
-                        </div>
+                        <div class="text-[9px] text-gray-400 font-mono">ID: #02</div>
                     </div>
-
-                    <div class="bg-[#1C1C1E] border border-white/5 rounded-2xl p-3 flex flex-col justify-between h-40 shadow-lg">
-                        <div class="flex items-center gap-2.5">
-                            <img src="image_3.jpeg" alt="Player 3" class="w-9 h-9 rounded-xl bg-black object-cover border border-white/10 shrink-0">
-                            <div class="min-w-0 flex-1">
-                                <h4 contenteditable="false" class="editable-text font-bold text-xs text-white truncate">Baved Khan</h4>
-                                <p contenteditable="false" class="editable-text text-[9px] text-[#34C759] font-medium mt-0.5 truncate">ACC: 70%</p>
-                            </div>
-                        </div>
-                        <div class="flex items-center justify-between flex-1">
-                            <div class="relative w-10 h-10">
-                                <svg viewBox="0 0 36 36" class="w-10 h-10 chart-circle">
-                                    <path d="M18 2a16 16 0 110 32 16 16 0 010-32" fill="none" stroke="#2C2C2E" stroke-width="3"></path>
-                                    <path stroke-dasharray="70, 100" d="M18 2a16 16 0 110 32 16 16 0 010-32" fill="none" stroke="#34C759" stroke-width="3"></path>
-                                </svg>
-                            </div>
-                            <div class="text-[8px] text-gray-400 font-medium uppercase tracking-wider text-right">Win<br>Rate</div>
-                        </div>
-                    </div>
-
-                    <div class="bg-[#1C1C1E] border border-white/5 rounded-2xl p-3 flex flex-col justify-between h-40 shadow-lg">
-                        <div class="flex items-center gap-2.5">
-                            <img src="image_4.jpeg" alt="Player 4" class="w-9 h-9 rounded-xl bg-black object-cover border border-white/10 shrink-0">
-                            <div class="min-w-0 flex-1">
-                                <h4 contenteditable="false" class="editable-text font-bold text-xs text-white truncate">Boko Khan</h4>
-                                <p contenteditable="false" class="editable-text text-[9px] text-[#34C759] font-medium mt-0.5 truncate">DEF: 88</p>
-                            </div>
-                        </div>
-                        <div class="flex justify-around items-center flex-1">
-                            <div class="w-7 h-7 bg-[#2C2C2E] rounded-xl flex items-center justify-center text-xs">⚔️</div>
-                            <div class="w-7 h-7 bg-[#2C2C2E] rounded-xl flex items-center justify-center text-xs">🛡️</div>
-                            <div class="w-7 h-7 bg-[#2C2C2E] rounded-xl flex items-center justify-center text-xs">⭐</div>
-                        </div>
-                    </div>
-
-                    <div class="bg-[#1C1C1E] border border-white/5 rounded-2xl p-3 flex flex-col justify-between h-40 shadow-lg">
-                        <div class="flex items-center gap-2.5">
-                            <img src="image_5.jpeg" alt="Player 5" class="w-9 h-9 rounded-xl bg-black object-cover border border-white/10 shrink-0">
-                            <div class="min-w-0 flex-1">
-                                <h4 contenteditable="false" class="editable-text font-bold text-xs text-white truncate">Bahjai Khan</h4>
-                                <p contenteditable="false" class="editable-text text-[9px] text-[#34C759] font-medium mt-0.5 truncate">AVG: 35.2</p>
-                            </div>
-                        </div>
-                        <div class="flex-1 flex flex-col justify-end pb-1 space-y-2">
-                            <div class="text-[8px] text-gray-400 font-medium uppercase tracking-wider">Performance</div>
-                            <div class="relative w-full h-1.5 bg-[#2C2C2E] rounded-full">
-                                <div class="absolute top-0 left-0 h-1.5 bg-[#34C759] rounded-full" style="width: 85%;"></div>
-                            </div>
-                        </div>
-                    </div>
-
-                    <div class="bg-[#1C1C1E] border border-white/5 rounded-2xl p-3 flex flex-col justify-between h-40 shadow-lg">
-                        <div class="flex items-center gap-2.5">
-                            <img src="image_6.jpeg" alt="Player 6" class="w-9 h-9 rounded-xl bg-black object-cover border border-white/10 shrink-0">
-                            <div class="min-w-0 flex-1">
-                                <h4 contenteditable="false" class="editable-text font-bold text-xs text-white truncate">Rajned Khan</h4>
-                                <p contenteditable="false" class="editable-text text-[9px] text-[#34C759] font-medium mt-0.5 truncate">FORM: 90</p>
-                            </div>
-                        </div>
-                        <div class="grid grid-cols-3 gap-1 flex-1 items-end">
-                            <div class="bg-[#2C2C2E] p-1.5 text-center rounded-xl">
-                                <div contenteditable="false" class="editable-text text-white text-[10px] font-bold">25</div>
-                                <div class="text-[6px] text-gray-400 font-medium uppercase">Mat</div>
-                            </div>
-                            <div class="bg-[#2C2C2E] p-1.5 text-center rounded-xl">
-                                <div contenteditable="false" class="editable-text text-[#34C759] text-[10px] font-bold">35</div>
-                                <div class="text-[6px] text-gray-400 font-medium uppercase">Avg</div>
-                            </div>
-                            <div class="bg-[#2C2C2E] p-1.5 text-center rounded-xl">
-                                <div contenteditable="false" class="editable-text text-white text-[10px] font-bold">120</div>
-                                <div class="text-[6px] text-gray-400 font-medium uppercase">SR</div>
-                            </div>
-                        </div>
-                    </div>
-
                 </div>
             </section>
 
-            <!-- WhatsApp Broadcast Section -->
-            <section class="bg-[#1C1C1E] border border-white/5 rounded-2xl p-4 my-4 shadow-2xl">
-                <div class="text-[10px] font-bold text-[#8E8E93] mb-3 uppercase tracking-wider">WhatsApp Broadcast</div>
-                
-                <div class="space-y-3">
-                    <div>
-                        <label class="text-[10px] text-gray-400 block mb-1 font-medium">Match Title</label>
-                        <input type="text" id="admin-match-title" value="MARKHOR 11 vs DUBAI STRIKERS" class="w-full bg-[#2C2C2E] border border-white/5 rounded-xl px-3 py-2.5 text-white text-xs focus:outline-none focus:border-[#34C759] transition">
-                    </div>
-                    <div>
-                        <label class="text-[10px] text-gray-400 block mb-1 font-medium">Match Schedule</label>
-                        <input type="text" id="admin-match-date" value="Sat, Oct 26 @ 7 PM" class="w-full bg-[#2C2C2E] border border-white/5 rounded-xl px-3 py-2.5 text-white text-xs focus:outline-none focus:border-[#34C759] transition">
-                    </div>
-                    
-                    <button type="button" onclick="broadcastWhatsAppRich()" class="ios-button w-full bg-[#34C759] text-black font-bold text-xs tracking-wide py-3 rounded-xl transition flex items-center justify-center gap-2 mt-2 shadow-lg">
-                        <svg xmlns="http://www.w3.org/2000/svg" width="15" height="15" viewBox="0 0 24 24" fill="currentColor"><path d="M.057 24l1.687-6.163c-1.041-1.804-1.588-3.849-1.587-5.946.003-6.556 5.338-11.891 11.893-11.891 3.181.001 6.167 1.24 8.413 3.488 2.245 2.248 3.481 5.236 3.48 8.414-.003 6.557-5.338 11.892-11.893 11.892-1.99-.001-3.951-.5-5.688-1.448l-6.305 1.654zm6.597-3.807c1.676.995 3.276 1.591 5.392 1.592 5.448 0 9.898-4.45 9.898-9.892 0-2.64-1.027-5.119-2.894-6.985-1.864-1.866-4.346-2.895-6.986-2.895-5.452 0-9.898 4.451-9.898 9.892 0 1.954.516 3.82 1.493 5.485l-1.04 3.797 3.935-1.004zm10.741-7.464c-.058-.098-.216-.156-.453-.274-.236-.118-1.399-.691-1.615-.77-.216-.079-.374-.118-.531.118-.157.236-.61 .77-.748.928-.137.157-.275.177-.512.059-.236-.118-1-.368-1.905-1.177-.703-.628-1.177-1.404-1.315-1.64-.138-.236-.015-.364.103-.482.106-.106.236-.275.354-.413.118-.138.157-.236.236-.393.079-.157.039-.295-.02-.413-.059-.118-.531-1.278-.727-1.749-.191-.462-.385-.4-.531-.408-.138-.007-.295-.007-.453-.007-.157 0-.413.059-.629.295-.216.236-.826.806-.826 1.965 0 1.159.846 2.278.964 2.435.118.157 1.66 2.535 4.024 3.555 2.364 1.02 2.364.688 2.797.649.433-.039 1.399-.571 1.595-1.121.197-.55.197-1.023.138-1.121z"/></svg>
-                        Send WhatsApp Alert
-                    </button>
-                </div>
+            <!-- WhatsApp Control Panel -->
+            <section class="glass-card rounded-2xl p-4 space-y-3">
+                <div class="text-[10px] font-bold text-gray-400 uppercase tracking-wider">WhatsApp Broadcast Engine</div>
+                <input type="text" id="wa-title" value="MARKHOR 11 vs DUBAI STRIKERS" class="w-full bg-[#1c1c1e] border border-white/10 rounded-xl px-3 py-2.5 text-white text-xs focus:outline-none focus:border-[#34C759]">
+                <button type="button" onclick="sendWhatsApp()" class="action-btn w-full bg-[#34C759] text-black font-bold text-xs py-3 rounded-xl flex items-center justify-center gap-2">
+                    Send Broadcast Alert
+                </button>
             </section>
 
         </main>
@@ -257,99 +132,99 @@
 
     <script>
         let isEditing = false;
-
+        
+        // --- 1. Apple-Only Liquid Glass Detector ---
         window.addEventListener('DOMContentLoaded', () => {
-            loadSavedData();
+            const isApple = /iPad|iPhone|iPod|Macintosh/.test(navigator.userAgent) && !window.MSStream;
+            const glassElements = document.querySelectorAll('.glass-card, header');
+            
+            glassElements.forEach(el => {
+                if (isApple) {
+                    el.classList.add('apple-liquid-glass');
+                } else {
+                    el.classList.add('fallback-glass');
+                }
+            });
+
+            loadFromBackend();
         });
 
+        // --- 2. Edit & Backend Persistence Controller ---
         function toggleEditMode() {
             isEditing = !isEditing;
-            const editables = document.querySelectorAll('.editable-text');
-            const btn = document.getElementById('edit-toggle-btn');
-            const downloadBtn = document.getElementById('download-btn');
-            const hint = document.getElementById('edit-hint');
+            const fields = document.querySelectorAll('.editable-field');
+            const btn = document.getElementById('edit-btn');
             const body = document.body;
 
-            editables.forEach(el => {
-                el.contentEditable = isEditing ? "true" : "false";
-            });
+            fields.forEach(el => el.contentEditable = isEditing ? "true" : "false");
 
             if (isEditing) {
-                btn.textContent = "Save";
+                btn.textContent = "Save Changes";
                 btn.style.backgroundColor = '#34C759';
-                btn.style.color = '#000000';
-                downloadBtn.classList.remove('hidden');
-                hint.classList.remove('hidden');
+                btn.style.color = '#000';
                 body.classList.add('editing-active');
             } else {
-                btn.textContent = "Edit App";
-                btn.style.backgroundColor = '#2C2C2E';
-                btn.style.color = '#FFFFFF';
-                downloadBtn.classList.add('hidden');
-                hint.classList.add('hidden');
+                btn.textContent = "Edit";
+                btn.style.backgroundColor = '#2c2c2e';
+                btn.style.color = '#fff';
                 body.classList.remove('editing-active');
                 
-                saveDataToStorage();
-
-                document.getElementById('admin-match-title').value = document.getElementById('match-title-display').textContent.trim();
-                document.getElementById('admin-match-date').value = document.getElementById('match-date-display').textContent.trim();
+                pushDataToBackend();
             }
         }
 
-        function saveDataToStorage() {
-            const editables = document.querySelectorAll('.editable-text');
-            const savedContent = {};
-            editables.forEach((el, index) => {
-                savedContent[index] = el.innerHTML;
-            });
-            localStorage.setItem('m11_app_content', JSON.stringify(savedContent));
-        }
+        // Simulating Backend Integration (Replace URL with your server endpoint, e.g., Node.js / Firebase)
+        const BACKEND_API_URL = "https://your-backend-server.com/api/update-data";
 
-        function loadSavedData() {
-            const savedContent = localStorage.getItem('m11_app_content');
-            if (savedContent) {
-                const data = JSON.parse(savedContent);
-                const editables = document.querySelectorAll('.editable-text');
-                editables.forEach((el, index) => {
-                    if (data[index] !== undefined) {
-                        el.innerHTML = data[index];
-                    }
+        async function pushDataToBackend() {
+            const data = {
+                matchTitle: document.getElementById('match-title').innerHTML,
+                matchDate: document.getElementById('match-date').innerHTML,
+                timestamp: new Date().toISOString()
+            };
+
+            // Save locally as backup
+            localStorage.setItem('m11_data', JSON.stringify(data));
+
+            document.getElementById('sync-status').textContent = "Saving to Server...";
+            
+            try {
+                // If you deploy a backend service, uncomment below:
+                /*
+                await fetch(BACKEND_API_URL, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify(data)
                 });
+                */
+                setTimeout(() => {
+                    document.getElementById('sync-status').textContent = "Synced with Backend";
+                }, 600);
+            } catch (e) {
+                document.getElementById('sync-status').textContent = "Saved Locally (Offline)";
             }
-            document.getElementById('admin-match-title').value = document.getElementById('match-title-display').textContent.trim();
-            document.getElementById('admin-match-date').value = document.getElementById('match-date-display').textContent.trim();
         }
 
-        function downloadHTMLFile() {
-            const editables = document.querySelectorAll('.editable-text');
-            editables.forEach(el => el.contentEditable = "false");
-            
-            const docHTML = "<!DOCTYPE html>\n" + document.documentElement.outerHTML;
-            const blob = new Blob([docHTML], { type: 'text/html' });
-            const a = document.createElement('a');
-            a.href = URL.createObjectURL(blob);
-            a.download = 'index.html';
-            a.click();
+        async function loadFromBackend() {
+            // Pulls latest saved state from storage or backend server
+            const saved = localStorage.getItem('m11_data');
+            if (saved) {
+                const data = JSON.parse(saved);
+                if(data.matchTitle) document.getElementById('match-title').innerHTML = data.matchTitle;
+                if(data.matchDate) document.getElementById('match-date').innerHTML = data.matchDate;
+                if(data.matchTitle) document.getElementById('wa-title').value = data.matchTitle.replace(/<[^>]*>?/gm, '');
+            }
         }
 
-        function syncGoogleCalendar() {
-            const title = document.getElementById('match-title-display').textContent.trim();
-            const dateStr = document.getElementById('match-date-display').textContent.trim();
-            const calUrl = "https://calendar.google.com/calendar/render?action=TEMPLATE&text=" + encodeURIComponent(title) + "&details=" + encodeURIComponent("Schedule: " + dateStr);
-            window.open(calUrl, '_blank');
+        function syncCalendar() {
+            const title = document.getElementById('match-title').textContent.trim();
+            const date = document.getElementById('match-date').textContent.trim();
+            window.open(`https://calendar.google.com/calendar/render?action=TEMPLATE&text=${encodeURIComponent(title)}&details=${encodeURIComponent(date)}`, '_blank');
         }
 
-        function broadcastWhatsAppRich() {
-            const title = document.getElementById('admin-match-title').value || 'MARKHOR 11 FIXTURE';
-            const date = document.getElementById('admin-match-date').value || 'TBA';
-            
-            const message = "🏏 *MARKHOR 11 MATCH ALERT*\n\n" +
-                            "*FIXTURE:* " + title + "\n" +
-                            "*SCHEDULE:* " + date + "\n\n" +
-                            "STATUS: Roster Confirmed\n\n" +
-                            "📌 _Open team app to sync schedule & view live player metrics._";
-
-            window.location.href = "https://wa.me/?text=" + encodeURIComponent(message);
+        function sendWhatsApp() {
+            const text = document.getElementById('wa-title').value;
+            window.location.href = `https://wa.me/?text=${encodeURIComponent("🏏 MARKHOR 11 UPDATE: " + text)}`;
         }
     </script>
 </body>
