@@ -3,6 +3,8 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
+    <!-- Prevents GitHub Pages referrer blocking on CricHeroes / AWS S3 media links -->
+    <meta name="referrer" content="no-referrer">
     <title>Markhor 11 - CricHeroes Squad Hub</title>
     <!-- Tailwind CSS -->
     <script src="https://cdn.tailwindcss.com"></script>
@@ -85,19 +87,6 @@
             display: flex !important;
         }
 
-        .glass-input {
-            background: rgba(0, 0, 0, 0.3);
-            border: 1px solid rgba(255, 255, 255, 0.1);
-            color: white;
-            transition: all 0.2s ease;
-        }
-        .glass-input:focus {
-            outline: none;
-            border-color: var(--brand-green);
-            background: rgba(0, 0, 0, 0.5);
-            box-shadow: 0 0 0 3px rgba(52, 199, 89, 0.25);
-        }
-
         ::-webkit-scrollbar { display: none; }
     </style>
 </head>
@@ -111,7 +100,7 @@
         <header class="glass-panel shrink-0 z-50 px-5 pt-4 pb-3 flex items-center justify-between border-b border-white/10 rounded-b-3xl">
             <div class="flex items-center space-x-3">
                 <div class="relative group cursor-pointer" onclick="triggerFileUpload('team-logo-file')">
-                    <img id="team-logo" src="https://s3.ap-south-1.amazonaws.com/cricheroes-media/team_logo/default_team.png" class="w-10 h-10 rounded-[14px] object-cover border border-white/20 shadow-md bg-zinc-900">
+                    <img id="team-logo" src="https://s3.ap-south-1.amazonaws.com/cricheroes-media/team_logo/default_team.png" onerror="this.onerror=null; this.src=DEFAULT_TEAM_SVG;" class="w-10 h-10 rounded-[14px] object-cover border border-white/20 shadow-md bg-zinc-900">
                     <div class="avatar-overlay absolute inset-0 bg-black/60 rounded-[14px] items-center justify-center text-[8px] font-bold text-white hidden">EDIT</div>
                     <input type="file" id="team-logo-file" class="hidden" accept="image/*" onchange="previewImage(event, 'team-logo')">
                 </div>
@@ -201,24 +190,18 @@
                 </div>
             </section>
 
-            <!-- Discord Webhook Integration -->
-            <section class="glass-panel rounded-[28px] p-5 space-y-4">
-                <div class="text-[11px] font-bold text-gray-300 uppercase tracking-widest flex items-center gap-2">
-                    <span class="w-2 h-2 rounded-full bg-[#5865F2]"></span> Discord Integration
-                </div>
-                <input type="password" id="discord-url" placeholder="Discord Webhook URL (https://...)" class="glass-input w-full rounded-[14px] px-4 py-3.5 text-white text-xs font-medium">
-                <button type="button" onclick="sendDiscordWebhook()" class="action-btn w-full bg-[#5865F2] text-white font-bold text-xs py-4 rounded-[16px] shadow-lg">
-                    Broadcast Playing 11 & Bench to Discord
-                </button>
-            </section>
-
         </main>
     </div>
 
     <script>
         let isEditing = false;
-        const CRICHEROES_AVATAR = 'https://s3.ap-south-1.amazonaws.com/cricheroes-media/user_profile/default_profile.png';
-        const CRICHEROES_LOGO = 'https://s3.ap-south-1.amazonaws.com/cricheroes-media/team_logo/default_team.png';
+        
+        // Inline SVG Data URIs ensure instant rendering on GitHub Pages without CDN/Hotlink blocking
+        const DEFAULT_AVATAR_SVG = "data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='%23888888'><path d='M12 12c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm0 2c-2.67 0-8 1.34-8 4v2h16v-2c0-2.66-5.33-4-8-4z'/></svg>";
+        const DEFAULT_TEAM_SVG = "data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='%2334C759'><path d='M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5'/></svg>";
+        
+        const CRICHEROES_AVATAR = "https://s3.ap-south-1.amazonaws.com/cricheroes-media/user_profile/default_profile.png";
+        const CRICHEROES_LOGO = "https://s3.ap-south-1.amazonaws.com/cricheroes-media/team_logo/default_team.png";
 
         let teamState = {
             matchDate: "SAT, OCT 26 @ 7 PM",
@@ -268,13 +251,15 @@
             const badgeClass = isCaptain 
                 ? 'bg-[#34C759] text-black font-extrabold' 
                 : (isExtra ? 'bg-amber-500/30 text-amber-200 border border-amber-400/30' : 'bg-black/40 text-gray-300 border border-white/10');
+            
+            const avatarSrc = p.avatar || CRICHEROES_AVATAR;
 
             return `
                 <div class="player-card glass-panel rounded-[24px] p-3.5 flex flex-col justify-between h-44 relative overflow-hidden ${borderStyle}">
                     ${isCaptain ? '<div class="absolute inset-0 bg-gradient-to-br from-[#34C759]/10 to-transparent pointer-events-none"></div>' : ''}
                     <div class="flex justify-between items-start z-10">
                         <div class="relative cursor-pointer" onclick="triggerFileUpload('file-${index}')">
-                            <img id="p${index}-avatar" src="${p.avatar || CRICHEROES_AVATAR}" class="w-12 h-12 rounded-full object-cover border-2 ${isCaptain ? 'border-[#34C759]' : 'border-white/20'} shadow-md bg-zinc-900">
+                            <img id="p${index}-avatar" src="${avatarSrc}" onerror="this.onerror=null; this.src=DEFAULT_AVATAR_SVG;" class="w-12 h-12 rounded-full object-cover border-2 ${isCaptain ? 'border-[#34C759]' : 'border-white/20'} shadow-md bg-zinc-900">
                             <div class="avatar-overlay absolute inset-0 bg-black/60 rounded-full items-center justify-center text-[9px] font-bold text-white hidden">PHOTO</div>
                             <input type="file" id="file-${index}" class="hidden" accept="image/*" onchange="previewPlayerImage(event, ${index}, ${isExtra})">
                         </div>
@@ -414,52 +399,12 @@
                     console.error("Error loading saved data:", e);
                 }
             }
-            const savedHook = localStorage.getItem('m11_discord_hook');
-            if (savedHook) document.getElementById('discord-url').value = savedHook;
         }
 
         function syncCalendar() {
             const title = document.getElementById('match-title').innerText.replace(/\n/g, " ").trim();
             const date = document.getElementById('match-date').textContent.trim();
             window.open(`https://calendar.google.com/calendar/render?action=TEMPLATE&text=${encodeURIComponent(title)}&details=${encodeURIComponent(date)}`, '_blank');
-        }
-
-        async function sendDiscordWebhook() {
-            const webhookUrl = document.getElementById('discord-url').value.trim();
-            if (!webhookUrl) {
-                alert("Please enter a valid Discord Webhook URL.");
-                return;
-            }
-            localStorage.setItem('m11_discord_hook', webhookUrl);
-
-            const title = document.getElementById('match-title').innerText.replace(/\n/g, " ").trim();
-            const date = document.getElementById('match-date').textContent.trim();
-
-            const startingList = teamState.starting.map((p, i) => `**${i+1}. ${p.name}** — \`${p.role}\` (*${p.stat}*)`);
-            const extraList = teamState.extraPlayers.map((p, i) => `**${i+12}. ${p.name}** — \`${p.role}\` (*${p.stat}*)`);
-
-            const payload = {
-                content: "🚨 **MARKHOR 11 SQUAD BROADCAST** 🚨",
-                embeds: [{
-                    title: title,
-                    description: `📅 **Fixture Time:** ${date}\n\n🏆 **Starting Playing XI:**\n\n${startingList.join('\n')}\n\n📋 **Bench & Reserves:**\n\n${extraList.length ? extraList.join('\n') : '*None*'}`,
-                    color: 3458905,
-                    timestamp: new Date().toISOString()
-                }]
-            };
-
-            try {
-                const response = await fetch(webhookUrl, {
-                    method: 'POST',
-                    headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify(payload)
-                });
-                if (response.ok || response.status === 204) {
-                    alert("Successfully broadcasted squad to Discord!");
-                }
-            } catch (err) {
-                alert("Error sending webhook.");
-            }
         }
     </script>
 </body>
