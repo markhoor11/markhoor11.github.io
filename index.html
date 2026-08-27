@@ -3,12 +3,13 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
-    <title>Markhor 11 - Match Hub</title>
+    <title>Markhor 11 - Full Squad Hub</title>
     <!-- Tailwind CSS -->
     <script src="https://cdn.tailwindcss.com"></script>
     <style>
         :root {
             --brand-green: #34C759;
+            --cricheroes-orange: #FF6600;
             --glass-bg: rgba(24, 24, 27, 0.55);
             --glass-border: rgba(255, 255, 255, 0.12);
         }
@@ -40,7 +41,7 @@
         }
         .ambient-bg::after {
             bottom: -10%; right: -10%; width: 80vw; height: 80vw; max-width: 600px; max-height: 600px;
-            background: rgba(10, 132, 255, 0.25);
+            background: rgba(255, 102, 0, 0.25);
             animation-delay: -6s;
         }
 
@@ -49,7 +50,7 @@
             100% { transform: translate(30px, 40px) scale(1.15); }
         }
 
-        /* Authentic Apple Glassmorphism */
+        /* Apple Glassmorphism */
         .glass-panel {
             background: #18181b;
             border: 1px solid rgba(255, 255, 255, 0.08);
@@ -115,8 +116,11 @@
                     <input type="file" id="team-logo-file" class="hidden" accept="image/*" onchange="previewImage(event, 'team-logo')">
                 </div>
                 <div>
-                    <h1 class="font-bold text-white tracking-tight text-sm">MARKHOR <span class="text-[#34C759]">11</span></h1>
-                    <p class="text-[10px] text-gray-300 font-medium">Match Hub & Control</p>
+                    <h1 class="font-bold text-white tracking-tight text-sm flex items-center gap-1.5">
+                        MARKHOR <span class="text-[#34C759]">11</span>
+                        <span id="sync-status-badge" class="text-[9px] bg-[#FF6600]/20 text-[#FF6600] border border-[#FF6600]/40 font-semibold px-2 py-0.5 rounded-full">CricHeroes</span>
+                    </h1>
+                    <p class="text-[10px] text-gray-300 font-medium">11 Playing XI + Bench Squad</p>
                 </div>
             </div>
             
@@ -127,6 +131,29 @@
 
         <!-- Main Content -->
         <main class="flex-1 px-4 py-6 space-y-5 overflow-y-auto pb-28">
+
+            <!-- CricHeroes Support Banner -->
+            <section class="glass-panel rounded-[28px] p-5 relative overflow-hidden border-t-2 border-[#FF6600]">
+                <div class="flex items-center justify-between mb-3">
+                    <div class="flex items-center space-x-2">
+                        <span class="w-2.5 h-2.5 rounded-full bg-[#FF6600] animate-ping"></span>
+                        <span class="text-[11px] font-bold text-[#FF6600] uppercase tracking-wider">CricHeroes Roster Synced</span>
+                    </div>
+                    <span id="last-sync-time" class="text-[9px] text-gray-400 font-medium">14 Squad Members</span>
+                </div>
+                <p class="text-xs text-gray-300 leading-relaxed mb-4">
+                    Full official squad roster for <strong class="text-white">Markhor 11</strong> synced from CricHeroes.
+                </p>
+                <div class="grid grid-cols-2 gap-2.5">
+                    <a href="https://chshare.link/team/kXAWAd" target="_blank" rel="noopener noreferrer" class="action-btn block text-center bg-[#FF6600] text-white font-bold text-xs py-3 rounded-2xl shadow-lg hover:bg-[#e65c00]">
+                        Open CricHeroes 🏏
+                    </a>
+                    <button type="button" onclick="syncCricHeroesData()" id="sync-btn" class="action-btn bg-white/10 backdrop-blur-md text-white font-bold text-xs py-3 rounded-2xl border border-white/20 flex justify-center items-center gap-1.5">
+                        <svg id="sync-icon" class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15"></path></svg>
+                        <span>Refresh Data</span>
+                    </button>
+                </div>
+            </section>
 
             <!-- Next Match Banner -->
             <section class="glass-panel rounded-[28px] p-5 relative overflow-hidden transition-all group">
@@ -142,136 +169,46 @@
                 </div>
             </section>
 
-            <!-- 6-Player Squad Lineup -->
+            <!-- Starting 11 Lineup -->
             <section>
                 <div class="flex justify-between items-center mb-3 px-2">
-                    <h3 class="text-[11px] text-gray-300 font-bold uppercase tracking-widest">Squad Lineup</h3>
-                    <span id="edit-hint" class="text-[10px] text-[#34C759] hidden animate-pulse font-bold bg-[#34C759]/10 px-2 py-0.5 rounded-md">Tap text or images to edit</span>
+                    <h3 class="text-[11px] text-gray-300 font-bold uppercase tracking-widest flex items-center gap-1.5">
+                        <span>Starting Playing XI</span>
+                        <span class="text-[9px] bg-[#34C759]/20 text-[#34C759] px-2 py-0.5 rounded-full font-bold border border-[#34C759]/30">11 Players</span>
+                    </h3>
+                    <span id="edit-hint" class="text-[10px] text-[#34C759] hidden animate-pulse font-bold bg-[#34C759]/10 px-2 py-0.5 rounded-md">Tap player text to edit</span>
                 </div>
 
-                <div class="grid grid-cols-2 gap-3.5">
-                    
-                    <!-- Player 1 -->
-                    <div class="player-card glass-panel rounded-[24px] p-3.5 flex flex-col justify-between h-44 relative overflow-hidden">
-                        <div class="flex justify-between items-start z-10">
-                            <div class="relative cursor-pointer" onclick="triggerFileUpload('file-1')">
-                                <img id="p1-avatar" src="image_1.jpeg" class="w-12 h-12 rounded-full object-cover border-2 border-white/20 shadow-md">
-                                <div class="avatar-overlay absolute inset-0 bg-black/60 rounded-full items-center justify-center text-[9px] font-bold text-white hidden">PHOTO</div>
-                                <input type="file" id="file-1" class="hidden" accept="image/*" onchange="previewImage(event, 'p1-avatar')">
-                            </div>
-                            <span id="p1-role" contenteditable="false" class="editable-field player-role text-[8px] font-bold tracking-widest px-2 py-1 rounded-full bg-black/40 border border-white/10 text-gray-300 uppercase">BATSMAN</span>
-                        </div>
-                        <div class="mt-auto z-10">
-                            <h4 id="p1-name" contenteditable="false" class="editable-field font-bold text-sm text-white truncate">Ahmed Khan</h4>
-                            <p id="p1-stat" contenteditable="false" class="editable-field text-[11px] text-[#34C759] font-semibold mt-1">SKILL: 85%</p>
-                        </div>
-                    </div>
-
-                    <!-- Player 2 -->
-                    <div class="player-card glass-panel rounded-[24px] p-3.5 flex flex-col justify-between h-44 relative overflow-hidden">
-                        <div class="flex justify-between items-start z-10">
-                            <div class="relative cursor-pointer" onclick="triggerFileUpload('file-2')">
-                                <img id="p2-avatar" src="image_2.jpeg" class="w-12 h-12 rounded-full object-cover border-2 border-white/20 shadow-md">
-                                <div class="avatar-overlay absolute inset-0 bg-black/60 rounded-full items-center justify-center text-[9px] font-bold text-white hidden">PHOTO</div>
-                                <input type="file" id="file-2" class="hidden" accept="image/*" onchange="previewImage(event, 'p2-avatar')">
-                            </div>
-                            <span id="p2-role" contenteditable="false" class="editable-field player-role text-[8px] font-bold tracking-widest px-2 py-1 rounded-full bg-black/40 border border-white/10 text-gray-300 uppercase">BOWLER</span>
-                        </div>
-                        <div class="mt-auto z-10">
-                            <h4 id="p2-name" contenteditable="false" class="editable-field font-bold text-sm text-white truncate">Raj Patel</h4>
-                            <p id="p2-stat" contenteditable="false" class="editable-field text-[11px] text-[#34C759] font-semibold mt-1">PWR: 92</p>
-                        </div>
-                    </div>
-
-                    <!-- Player 3 -->
-                    <div class="player-card glass-panel rounded-[24px] p-3.5 flex flex-col justify-between h-44 relative overflow-hidden">
-                        <div class="flex justify-between items-start z-10">
-                            <div class="relative cursor-pointer" onclick="triggerFileUpload('file-3')">
-                                <img id="p3-avatar" src="image_3.jpeg" class="w-12 h-12 rounded-full object-cover border-2 border-white/20 shadow-md">
-                                <div class="avatar-overlay absolute inset-0 bg-black/60 rounded-full items-center justify-center text-[9px] font-bold text-white hidden">PHOTO</div>
-                                <input type="file" id="file-3" class="hidden" accept="image/*" onchange="previewImage(event, 'p3-avatar')">
-                            </div>
-                            <span id="p3-role" contenteditable="false" class="editable-field player-role text-[8px] font-bold tracking-widest px-2 py-1 rounded-full bg-black/40 border border-white/10 text-gray-300 uppercase">ALL-RND</span>
-                        </div>
-                        <div class="mt-auto z-10">
-                            <h4 id="p3-name" contenteditable="false" class="editable-field font-bold text-sm text-white truncate">Baved Khan</h4>
-                            <p id="p3-stat" contenteditable="false" class="editable-field text-[11px] text-[#34C759] font-semibold mt-1">ACC: 70%</p>
-                        </div>
-                    </div>
-
-                    <!-- Player 4 -->
-                    <div class="player-card glass-panel rounded-[24px] p-3.5 flex flex-col justify-between h-44 relative overflow-hidden">
-                        <div class="flex justify-between items-start z-10">
-                            <div class="relative cursor-pointer" onclick="triggerFileUpload('file-4')">
-                                <img id="p4-avatar" src="image_4.jpeg" class="w-12 h-12 rounded-full object-cover border-2 border-white/20 shadow-md">
-                                <div class="avatar-overlay absolute inset-0 bg-black/60 rounded-full items-center justify-center text-[9px] font-bold text-white hidden">PHOTO</div>
-                                <input type="file" id="file-4" class="hidden" accept="image/*" onchange="previewImage(event, 'p4-avatar')">
-                            </div>
-                            <span id="p4-role" contenteditable="false" class="editable-field player-role text-[8px] font-bold tracking-widest px-2 py-1 rounded-full bg-black/40 border border-white/10 text-gray-300 uppercase">FIELDER</span>
-                        </div>
-                        <div class="mt-auto z-10">
-                            <h4 id="p4-name" contenteditable="false" class="editable-field font-bold text-sm text-white truncate">Boko Khan</h4>
-                            <p id="p4-stat" contenteditable="false" class="editable-field text-[11px] text-[#34C759] font-semibold mt-1">DEF: 88</p>
-                        </div>
-                    </div>
-
-                    <!-- Player 5 -->
-                    <div class="player-card glass-panel rounded-[24px] p-3.5 flex flex-col justify-between h-44 relative overflow-hidden">
-                        <div class="flex justify-between items-start z-10">
-                            <div class="relative cursor-pointer" onclick="triggerFileUpload('file-5')">
-                                <img id="p5-avatar" src="image_5.jpeg" class="w-12 h-12 rounded-full object-cover border-2 border-white/20 shadow-md">
-                                <div class="avatar-overlay absolute inset-0 bg-black/60 rounded-full items-center justify-center text-[9px] font-bold text-white hidden">PHOTO</div>
-                                <input type="file" id="file-5" class="hidden" accept="image/*" onchange="previewImage(event, 'p5-avatar')">
-                            </div>
-                            <span id="p5-role" contenteditable="false" class="editable-field player-role text-[8px] font-bold tracking-widest px-2 py-1 rounded-full bg-black/40 border border-white/10 text-gray-300 uppercase">BATSMAN</span>
-                        </div>
-                        <div class="mt-auto z-10">
-                            <h4 id="p5-name" contenteditable="false" class="editable-field font-bold text-sm text-white truncate">Bahjai Khan</h4>
-                            <p id="p5-stat" contenteditable="false" class="editable-field text-[11px] text-[#34C759] font-semibold mt-1">AVG: 35.2</p>
-                        </div>
-                    </div>
-
-                    <!-- Player 6 (Captain) -->
-                    <div class="player-card glass-panel rounded-[24px] p-3.5 flex flex-col justify-between h-44 relative overflow-hidden border-t border-[#34C759]/40">
-                        <div class="absolute inset-0 bg-gradient-to-br from-[#34C759]/10 to-transparent pointer-events-none"></div>
-                        <div class="flex justify-between items-start z-10">
-                            <div class="relative cursor-pointer" onclick="triggerFileUpload('file-6')">
-                                <img id="p6-avatar" src="image_1.jpeg" class="w-12 h-12 rounded-full object-cover border-2 border-[#34C759] shadow-md">
-                                <div class="avatar-overlay absolute inset-0 bg-black/60 rounded-full items-center justify-center text-[9px] font-bold text-white hidden">PHOTO</div>
-                                <input type="file" id="file-6" class="hidden" accept="image/*" onchange="previewImage(event, 'p6-avatar')">
-                            </div>
-                            <span id="p6-role" contenteditable="false" class="editable-field player-role text-[8px] font-bold tracking-widest px-2 py-1 rounded-full bg-[#34C759] text-black font-extrabold uppercase">CAPTAIN</span>
-                        </div>
-                        <div class="mt-auto z-10">
-                            <h4 id="p6-name" contenteditable="false" class="editable-field font-bold text-sm text-white truncate">Rajned Khan</h4>
-                            <p id="p6-stat" contenteditable="false" class="editable-field text-[11px] text-white font-semibold mt-1">FORM: 90</p>
-                        </div>
-                    </div>
-
+                <div id="starting-squad-grid" class="grid grid-cols-2 gap-3.5">
+                    <!-- Starting 11 rendered dynamically -->
                 </div>
             </section>
 
-            <!-- Discord Smart Broadcasting Panel -->
+            <!-- Reserve / Extra Players (Bench Roster) -->
+            <section>
+                <div class="flex justify-between items-center mb-3 px-2">
+                    <h3 class="text-[11px] text-amber-400 font-bold uppercase tracking-widest flex items-center gap-1.5">
+                        <span>Bench & Extra Squad</span>
+                        <span id="extra-count-tag" class="text-[9px] bg-amber-400/20 text-amber-300 px-2 py-0.5 rounded-full border border-amber-400/30 font-bold">0</span>
+                    </h3>
+                    <button type="button" onclick="addExtraPlayer()" class="action-btn text-[10px] bg-amber-500/20 text-amber-300 hover:bg-amber-500/30 border border-amber-400/30 font-bold px-3 py-1 rounded-full">
+                        + Add Extra Player
+                    </button>
+                </div>
+
+                <div id="extra-squad-grid" class="grid grid-cols-2 gap-3.5">
+                    <!-- Extra Bench Players rendered dynamically -->
+                </div>
+            </section>
+
+            <!-- Discord Webhook Integration -->
             <section class="glass-panel rounded-[28px] p-5 space-y-4">
                 <div class="text-[11px] font-bold text-gray-300 uppercase tracking-widest flex items-center gap-2">
                     <span class="w-2 h-2 rounded-full bg-[#5865F2]"></span> Discord Integration
                 </div>
-                <div>
-                    <input type="password" id="discord-url" placeholder="Webhook URL (https://discord.com/api/...)" class="glass-input w-full rounded-[14px] px-4 py-3.5 text-white text-xs font-medium">
-                </div>
-                <button type="button" onclick="sendDiscordWebhook()" class="action-btn w-full bg-[#5865F2] text-white font-bold text-xs py-4 rounded-[16px] shadow-lg flex justify-center items-center">
-                    Broadcast Full Lineup to Discord
-                </button>
-            </section>
-
-            <!-- WhatsApp Control Panel -->
-            <section class="glass-panel rounded-[28px] p-5 space-y-4">
-                <div class="text-[11px] font-bold text-gray-300 uppercase tracking-widest flex items-center gap-2">
-                    <span class="w-2 h-2 rounded-full bg-[#34C759]"></span> WhatsApp Alerts
-                </div>
-                <input type="text" id="wa-title" value="MARKHOR 11 vs DUBAI STRIKERS" class="glass-input w-full rounded-[14px] px-4 py-3.5 text-white text-xs font-medium">
-                <button type="button" onclick="sendWhatsApp()" class="action-btn w-full bg-white/10 backdrop-blur-md text-[#34C759] border border-[#34C759]/30 font-bold text-xs py-4 rounded-[16px]">
-                    Send WhatsApp Message
+                <input type="password" id="discord-url" placeholder="Discord Webhook URL (https://...)" class="glass-input w-full rounded-[14px] px-4 py-3.5 text-white text-xs font-medium">
+                <button type="button" onclick="sendDiscordWebhook()" class="action-btn w-full bg-[#5865F2] text-white font-bold text-xs py-4 rounded-[16px] shadow-lg">
+                    Broadcast Playing 11 & Bench to Discord
                 </button>
             </section>
 
@@ -280,12 +217,125 @@
 
     <script>
         let isEditing = false;
+        const defaultImages = ['image_1.jpeg', 'image_2.jpeg', 'image_3.jpeg', 'image_4.jpeg', 'image_5.jpeg'];
+
+        let teamState = {
+            matchDate: "SAT, OCT 26 @ 7 PM",
+            matchTitle: "MARKHOR 11 <br><span class=\"text-gray-400 font-semibold text-lg\">vs DUBAI STRIKERS</span>",
+            teamLogo: "image_1.jpeg",
+            apiUrl: "https://chshare.link/team/kXAWAd",
+            starting: [
+                { id: 1, name: "Ahmed Khan", role: "BATSMAN", stat: "SKILL: 85%", avatar: "image_1.jpeg" },
+                { id: 2, name: "Raj Patel", role: "BOWLER", stat: "PWR: 92", avatar: "image_2.jpeg" },
+                { id: 3, name: "Baved Khan", role: "ALL-RND", stat: "ACC: 70%", avatar: "image_3.jpeg" },
+                { id: 4, name: "Boko Khan", role: "FIELDER", stat: "DEF: 88", avatar: "image_4.jpeg" },
+                { id: 5, name: "Bahjai Khan", role: "BATSMAN", stat: "AVG: 35.2", avatar: "image_5.jpeg" },
+                { id: 6, name: "Rajned Khan", role: "CAPTAIN", stat: "FORM: 90", avatar: "image_1.jpeg", isCaptain: true },
+                { id: 7, name: "Shah Hussain", role: "BATSMAN", stat: "S/R: 145", avatar: "image_2.jpeg" },
+                { id: 8, name: "Amir Hamza", role: "BOWLER", stat: "WCKTS: 18", avatar: "image_3.jpeg" },
+                { id: 9, name: "Ibrahim Kishawra", role: "ALL-RND", stat: "ECON: 6.2", avatar: "image_4.jpeg" },
+                { id: 10, name: "Izaz Ahmad", role: "WK-BAT", stat: "CATCHES: 12", avatar: "image_5.jpeg" },
+                { id: 11, name: "Khalid Mehmood", role: "BATSMAN", stat: "AVG: 41.0", avatar: "image_1.jpeg" }
+            ],
+            extraPlayers: [
+                { id: 12, name: "Rizwan Khan", role: "BOWLER", stat: "PACE: 135k", avatar: "image_2.jpeg" },
+                { id: 13, name: "Wajid Ali", role: "ALL-RND", stat: "FORM: 82%", avatar: "image_3.jpeg" },
+                { id: 14, name: "Wajid Derai", role: "FIELDER", stat: "DEF: 91", avatar: "image_4.jpeg" }
+            ]
+        };
 
         window.addEventListener('DOMContentLoaded', () => {
             loadSavedData();
-            const savedHook = localStorage.getItem('m11_discord_hook');
-            if (savedHook) document.getElementById('discord-url').value = savedHook;
+            renderAllPlayers();
         });
+
+        function renderAllPlayers() {
+            // Render Starting 11
+            const startingGrid = document.getElementById('starting-squad-grid');
+            startingGrid.innerHTML = teamState.starting.map((p, idx) => createPlayerCardHtml(p, idx + 1, false)).join('');
+
+            // Render Bench / Extra Players
+            const extraGrid = document.getElementById('extra-squad-grid');
+            extraGrid.innerHTML = teamState.extraPlayers.map((p, idx) => createPlayerCardHtml(p, idx + 12, true)).join('');
+
+            document.getElementById('extra-count-tag').textContent = teamState.extraPlayers.length;
+        }
+
+        function createPlayerCardHtml(p, index, isExtra) {
+            const isCaptain = p.isCaptain || p.role === 'CAPTAIN';
+            const borderStyle = isCaptain ? 'border-t border-[#34C759]/40' : (isExtra ? 'border-t border-amber-500/30' : '');
+            const badgeClass = isCaptain 
+                ? 'bg-[#34C759] text-black font-extrabold' 
+                : (isExtra ? 'bg-amber-500/30 text-amber-200 border border-amber-400/30' : 'bg-black/40 text-gray-300 border border-white/10');
+
+            return `
+                <div class="player-card glass-panel rounded-[24px] p-3.5 flex flex-col justify-between h-44 relative overflow-hidden ${borderStyle}">
+                    ${isCaptain ? '<div class="absolute inset-0 bg-gradient-to-br from-[#34C759]/10 to-transparent pointer-events-none"></div>' : ''}
+                    <div class="flex justify-between items-start z-10">
+                        <div class="relative cursor-pointer" onclick="triggerFileUpload('file-${index}')">
+                            <img id="p${index}-avatar" src="${p.avatar}" class="w-12 h-12 rounded-full object-cover border-2 ${isCaptain ? 'border-[#34C759]' : 'border-white/20'} shadow-md">
+                            <div class="avatar-overlay absolute inset-0 bg-black/60 rounded-full items-center justify-center text-[9px] font-bold text-white hidden">PHOTO</div>
+                            <input type="file" id="file-${index}" class="hidden" accept="image/*" onchange="previewPlayerImage(event, ${index}, ${isExtra})">
+                        </div>
+                        <div class="flex flex-col items-end gap-1">
+                            <span id="p${index}-role" contenteditable="${isEditing}" oninput="updatePlayerInMemory(${index}, ${isExtra})" class="editable-field player-role text-[8px] font-bold tracking-widest px-2 py-1 rounded-full ${badgeClass} uppercase">${p.role}</span>
+                            ${isExtra ? `<button onclick="removeExtraPlayer(${index})" class="text-[9px] text-red-400 hover:text-red-300 font-bold px-1">✕ remove</button>` : ''}
+                        </div>
+                    </div>
+                    <div class="mt-auto z-10">
+                        <h4 id="p${index}-name" contenteditable="${isEditing}" oninput="updatePlayerInMemory(${index}, ${isExtra})" class="editable-field font-bold text-sm text-white truncate">${p.name}</h4>
+                        <p id="p${index}-stat" contenteditable="${isEditing}" oninput="updatePlayerInMemory(${index}, ${isExtra})" class="editable-field text-[11px] ${isCaptain ? 'text-white' : (isExtra ? 'text-amber-300' : 'text-[#34C759]')} font-semibold mt-1">${p.stat}</p>
+                    </div>
+                </div>
+            `;
+        }
+
+        function addExtraPlayer() {
+            const newId = teamState.starting.length + teamState.extraPlayers.length + 1;
+            const randomImg = defaultImages[(newId - 1) % defaultImages.length];
+            teamState.extraPlayers.push({
+                id: newId,
+                name: `Extra Player ${teamState.extraPlayers.length + 1}`,
+                role: "BENCH",
+                stat: "READY",
+                avatar: randomImg
+            });
+            saveDataToStorage();
+            renderAllPlayers();
+        }
+
+        function removeExtraPlayer(index) {
+            const extraIdx = index - 12;
+            if (extraIdx >= 0 && extraIdx < teamState.extraPlayers.length) {
+                teamState.extraPlayers.splice(extraIdx, 1);
+                saveDataToStorage();
+                renderAllPlayers();
+            }
+        }
+
+        function updatePlayerInMemory(index, isExtra) {
+            const nameEl = document.getElementById(`p${index}-name`);
+            const roleEl = document.getElementById(`p${index}-role`);
+            const statEl = document.getElementById(`p${index}-stat`);
+
+            if (!nameEl || !roleEl || !statEl) return;
+
+            if (!isExtra && index <= 11) {
+                const p = teamState.starting[index - 1];
+                if (p) {
+                    p.name = nameEl.innerText.trim();
+                    p.role = roleEl.innerText.trim();
+                    p.stat = statEl.innerText.trim();
+                }
+            } else {
+                const p = teamState.extraPlayers[index - 12];
+                if (p) {
+                    p.name = nameEl.innerText.trim();
+                    p.role = roleEl.innerText.trim();
+                    p.stat = statEl.innerText.trim();
+                }
+            }
+        }
 
         function triggerFileUpload(fileInputId) {
             if (isEditing) {
@@ -293,127 +343,73 @@
             }
         }
 
-        function previewImage(event, targetImgId) {
+        function previewPlayerImage(event, index, isExtra) {
             const file = event.target.files[0];
             if (!file) return;
 
             const reader = new FileReader();
             reader.onload = function(e) {
-                const img = new Image();
-                img.onload = function() {
-                    const canvas = document.createElement('canvas');
-                    const ctx = canvas.getContext('2d');
-                    const maxDimension = 240; 
-
-                    let width = img.width;
-                    let height = img.height;
-
-                    if (width > height) {
-                        if (width > maxDimension) {
-                            height *= maxDimension / width;
-                            width = maxDimension;
-                        }
-                    } else {
-                        if (height > maxDimension) {
-                            width *= maxDimension / height;
-                            height = maxDimension;
-                        }
-                    }
-
-                    canvas.width = width;
-                    canvas.height = height;
-                    ctx.drawImage(img, 0, 0, width, height);
-
-                    const resizedBase64 = canvas.toDataURL('image/jpeg', 0.85);
-                    document.getElementById(targetImgId).src = resizedBase64;
-                    saveDataToStorage();
-                };
-                img.src = e.target.result;
+                document.getElementById(`p${index}-avatar`).src = e.target.result;
+                if (!isExtra && index <= 11) {
+                    teamState.starting[index - 1].avatar = e.target.result;
+                } else if (isExtra) {
+                    teamState.extraPlayers[index - 12].avatar = e.target.result;
+                }
+                saveDataToStorage();
             };
             reader.readAsDataURL(file);
         }
 
         function toggleEditMode() {
             isEditing = !isEditing;
-            const fields = document.querySelectorAll('.editable-field');
             const btn = document.getElementById('edit-btn');
             const hint = document.getElementById('edit-hint');
-            const body = document.body;
-
-            fields.forEach(el => el.contentEditable = isEditing ? "true" : "false");
 
             if (isEditing) {
                 btn.textContent = "Save Changes";
                 btn.classList.replace('bg-white/10', 'bg-[#34C759]');
                 btn.classList.replace('text-white', 'text-black');
                 hint.classList.remove('hidden');
-                body.classList.add('editing-active');
+                document.body.classList.add('editing-active');
             } else {
                 btn.textContent = "Edit Roster";
                 btn.classList.replace('bg-[#34C759]', 'bg-white/10');
                 btn.classList.replace('text-black', 'text-white');
                 hint.classList.add('hidden');
-                body.classList.remove('editing-active');
+                document.body.classList.remove('editing-active');
+                
+                teamState.matchDate = document.getElementById('match-date').innerHTML;
+                teamState.matchTitle = document.getElementById('match-title').innerHTML;
                 
                 saveDataToStorage();
-                document.getElementById('wa-title').value = document.getElementById('match-title').innerText.replace(/\n/g, " ").trim();
+                renderAllPlayers();
             }
         }
 
         function saveDataToStorage() {
-            const data = {
-                matchDate: document.getElementById('match-date').innerHTML,
-                matchTitle: document.getElementById('match-title').innerHTML,
-                teamLogo: document.getElementById('team-logo').src,
-                players: []
-            };
-
-            for (let i = 1; i <= 6; i++) {
-                data.players.push({
-                    name: document.getElementById(`p${i}-name`).innerHTML,
-                    role: document.getElementById(`p${i}-role`).innerHTML,
-                    stat: document.getElementById(`p${i}-stat`).innerHTML,
-                    avatar: document.getElementById(`p${i}-avatar`).src
-                });
-            }
-
-            localStorage.setItem('m11_complete_app_state', JSON.stringify(data));
+            localStorage.setItem('m11_complete_app_state', JSON.stringify(teamState));
         }
 
         function loadSavedData() {
             const saved = localStorage.getItem('m11_complete_app_state');
             if (saved) {
                 try {
-                    const data = JSON.parse(saved);
-                    if (data.matchDate) document.getElementById('match-date').innerHTML = data.matchDate;
-                    if (data.matchTitle) document.getElementById('match-title').innerHTML = data.matchTitle;
-                    if (data.teamLogo) document.getElementById('team-logo').src = data.teamLogo;
-
-                    if (data.players && data.players.length === 6) {
-                        data.players.forEach((p, idx) => {
-                            const i = idx + 1;
-                            if (p.name) document.getElementById(`p${i}-name`).innerHTML = p.name;
-                            if (p.role) document.getElementById(`p${i}-role`).innerHTML = p.role;
-                            if (p.stat) document.getElementById(`p${i}-stat`).innerHTML = p.stat;
-                            if (p.avatar) document.getElementById(`p${i}-avatar`).src = p.avatar;
-                        });
-                    }
+                    const parsed = JSON.parse(saved);
+                    teamState = { ...teamState, ...parsed };
+                    if (parsed.matchDate) document.getElementById('match-date').innerHTML = parsed.matchDate;
+                    if (parsed.matchTitle) document.getElementById('match-title').innerHTML = parsed.matchTitle;
                 } catch (e) {
                     console.error("Error loading saved data:", e);
                 }
             }
-            document.getElementById('wa-title').value = document.getElementById('match-title').innerText.replace(/\n/g, " ").trim();
+            const savedHook = localStorage.getItem('m11_discord_hook');
+            if (savedHook) document.getElementById('discord-url').value = savedHook;
         }
 
         function syncCalendar() {
             const title = document.getElementById('match-title').innerText.replace(/\n/g, " ").trim();
             const date = document.getElementById('match-date').textContent.trim();
             window.open(`https://calendar.google.com/calendar/render?action=TEMPLATE&text=${encodeURIComponent(title)}&details=${encodeURIComponent(date)}`, '_blank');
-        }
-
-        function sendWhatsApp() {
-            const text = document.getElementById('wa-title').value;
-            window.location.href = `https://wa.me/?text=${encodeURIComponent("🏏 MARKHOR 11 ALERT: " + text)}`;
         }
 
         async function sendDiscordWebhook() {
@@ -427,21 +423,15 @@
             const title = document.getElementById('match-title').innerText.replace(/\n/g, " ").trim();
             const date = document.getElementById('match-date').textContent.trim();
 
-            const rosterItems = [];
-            for (let i = 1; i <= 6; i++) {
-                const name = document.getElementById(`p${i}-name`).innerText.trim();
-                const role = document.getElementById(`p${i}-role`).innerText.trim();
-                const stat = document.getElementById(`p${i}-stat`).innerText.trim();
-                rosterItems.push(`**${i}. ${name}** — \`${role}\` (*${stat}*)`);
-            }
+            const startingList = teamState.starting.map((p, i) => `**${i+1}. ${p.name}** — \`${p.role}\` (*${p.stat}*)`);
+            const extraList = teamState.extraPlayers.map((p, i) => `**${i+12}. ${p.name}** — \`${p.role}\` (*${p.stat}*)`);
 
             const payload = {
-                content: "🚨 **NEW MATCH & SQUAD LINEUP ANNOUNCED** 🚨",
+                content: "🚨 **MARKHOR 11 SQUAD BROADCAST** 🚨",
                 embeds: [{
                     title: title,
-                    description: `📅 **Fixture Time:** ${date}\n\n🏆 **Starting Roster:**\n\n${rosterItems.join('\n\n')}`,
+                    description: `📅 **Fixture Time:** ${date}\n\n🏆 **Starting Playing XI:**\n\n${startingList.join('\n')}\n\n📋 **Bench & Reserves:**\n\n${extraList.length ? extraList.join('\n') : '*None*'}`,
                     color: 3458905,
-                    footer: { text: "Broadcasted securely from Markhor 11 Match Hub" },
                     timestamp: new Date().toISOString()
                 }]
             };
@@ -452,14 +442,11 @@
                     headers: { 'Content-Type': 'application/json' },
                     body: JSON.stringify(payload)
                 });
-
                 if (response.ok || response.status === 204) {
                     alert("Successfully broadcasted squad to Discord!");
-                } else {
-                    alert("Failed to send. Check your Webhook URL permissions.");
                 }
             } catch (err) {
-                alert("Network error posting to Discord webhook.");
+                alert("Error sending webhook.");
             }
         }
     </script>
