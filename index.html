@@ -1,0 +1,194 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Markhor 11 - Match Hub</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        markhorGreen: '#00FF66',
+                        markhorEmerald: '#10B981',
+                        bgBase: '#050505',
+                        bgCard: '#0C0C0C',
+                        borderSubtle: '#1A1A1A'
+                    },
+                    fontFamily: {
+                        sans: ['Inter', 'system-ui', 'sans-serif'],
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        ::-webkit-scrollbar { width: 3px; }
+        ::-webkit-scrollbar-track { background: transparent; }
+        ::-webkit-scrollbar-thumb { background: #1A1A1A; border-radius: 4px; }
+        .glass-header { backdrop-filter: blur(8px); -webkit-backdrop-filter: blur(8px); }
+        .chart-circle { transform: rotate(-90deg); transform-origin: 50% 50%; }
+    </style>
+</head>
+<body class="bg-black text-gray-200 flex justify-center min-h-screen font-sans select-none antialiased">
+
+    <!-- Mobile Wrapper -->
+    <div class="w-full max-w-[420px] bg-bgBase min-h-screen shadow-2xl flex flex-col relative border-x border-borderSubtle">
+
+        <!-- Header -->
+        <header class="sticky top-0 z-50 bg-bgBase/90 glass-header border-b border-borderSubtle px-5 py-4 flex items-center justify-between">
+            <div class="flex items-center space-x-3">
+                <div class="w-8 h-8 rounded bg-bgCard border border-markhorGreen/50 flex items-center justify-center text-markhorGreen font-bold text-xs tracking-tighter">
+                    M11
+                </div>
+                <div>
+                    <h1 class="font-extrabold text-white tracking-widest text-xs">MARKHOR <span class="text-markhorGreen">11</span></h1>
+                    <p class="text-[9px] text-gray-500 font-medium uppercase tracking-widest mt-0.5">MCL Squad Hub</p>
+                </div>
+            </div>
+        </header>
+
+        <!-- Main Content -->
+        <main class="flex-1 px-5 py-6 space-y-6 overflow-y-auto pb-24">
+
+            <!-- Next Match Alert -->
+            <section class="bg-bgCard rounded-xl p-5 border border-borderSubtle hover:border-markhorGreen/30 transition duration-300">
+                <div class="flex justify-between items-center mb-3">
+                    <div class="text-[9px] font-bold text-markhorGreen uppercase tracking-widest bg-markhorGreen/10 px-2 py-1 rounded-sm">Next Fixture</div>
+                    <div id="match-date-display" class="text-[10px] text-gray-400 font-semibold tracking-wide">SAT, OCT 26</div>
+                </div>
+                <h2 id="match-title-display" class="text-sm font-black text-white uppercase tracking-wide mb-4">LOREM IPSUM vs DOLOR SIT</h2>
+                <a href="https://calendar.google.com" target="_blank" class="w-full block text-center bg-white text-black hover:bg-gray-200 font-bold text-[10px] uppercase tracking-widest py-2.5 rounded transition">
+                    Sync to Google Calendar
+                </a>
+            </section>
+
+            <!-- Squad Infographics Grid -->
+            <section>
+                <h3 class="text-[10px] text-gray-500 font-bold uppercase tracking-widest mb-3 px-1">Squad Roster</h3>
+                <div class="grid grid-cols-2 gap-3">
+                    
+                    <!-- Player Card 1 -->
+                    <div class="bg-bgCard border border-borderSubtle rounded-xl p-3.5 flex flex-col justify-between h-40">
+                        <div class="flex items-center gap-2.5 mb-2">
+                            <img src="image.png" alt="Player" class="w-9 h-9 rounded bg-black object-cover border border-borderSubtle grayscale hover:grayscale-0 transition duration-300">
+                            <div>
+                                <h4 class="font-bold text-[10px] text-white uppercase">Player Name</h4>
+                                <p class="text-[8px] text-markhorEmerald mt-0.5 tracking-wider">SKILL: 85%</p>
+                            </div>
+                        </div>
+                        <div class="flex justify-between items-end flex-1">
+                            <div class="text-[7px] text-gray-500 uppercase tracking-widest pb-1">Stats<br>Graph</div>
+                            <svg viewBox="0 0 100 100" class="w-12 h-12 opacity-80">
+                                <polygon points="50,5 95,30 80,85 20,85 5,30" fill="#10B98122" stroke="#10B981" stroke-width="1.5"/>
+                                <polygon points="50,25 75,40 65,70 35,70 25,40" fill="none" stroke="#00FF66" stroke-width="1"/>
+                            </svg>
+                        </div>
+                    </div>
+
+                    <!-- Player Card 2 -->
+                    <div class="bg-bgCard border border-borderSubtle rounded-xl p-3.5 flex flex-col justify-between h-40">
+                        <div class="flex items-center gap-2.5 mb-2">
+                            <img src="image_2.png" alt="Player" class="w-9 h-9 rounded bg-black object-cover border border-borderSubtle grayscale hover:grayscale-0 transition duration-300">
+                            <div>
+                                <h4 class="font-bold text-[10px] text-white uppercase">Player Name</h4>
+                                <p class="text-[8px] text-markhorEmerald mt-0.5 tracking-wider">PWR: 92</p>
+                            </div>
+                        </div>
+                        <div class="flex items-end justify-around flex-1 pb-1">
+                            <div class="flex flex-col items-center gap-1.5"><div class="w-2.5 bg-markhorEmerald h-6 rounded-t-sm opacity-80"></div></div>
+                            <div class="flex flex-col items-center gap-1.5"><div class="w-2.5 bg-markhorGreen h-10 rounded-t-sm opacity-80"></div></div>
+                            <div class="flex flex-col items-center gap-1.5"><div class="w-2.5 bg-white h-8 rounded-t-sm opacity-80"></div></div>
+                        </div>
+                    </div>
+
+                    <!-- Player Card 3 -->
+                    <div class="bg-bgCard border border-borderSubtle rounded-xl p-3.5 flex flex-col justify-between h-40">
+                        <div class="flex items-center gap-2.5 mb-2">
+                            <img src="image_3.png" alt="Player" class="w-9 h-9 rounded bg-black object-cover border border-borderSubtle grayscale hover:grayscale-0 transition duration-300">
+                            <div>
+                                <h4 class="font-bold text-[10px] text-white uppercase">Player Name</h4>
+                                <p class="text-[8px] text-markhorEmerald mt-0.5 tracking-wider">ACC: 70%</p>
+                            </div>
+                        </div>
+                        <div class="flex items-center justify-between flex-1">
+                            <div class="relative w-10 h-10">
+                                <svg viewBox="0 0 36 36" class="w-10 h-10 chart-circle">
+                                    <path d="M18 2a16 16 0 110 32 16 16 0 010-32" fill="none" stroke="#1A1A1A" stroke-width="3"></path>
+                                    <path stroke-dasharray="70, 100" d="M18 2a16 16 0 110 32 16 16 0 010-32" fill="none" stroke="#00FF66" stroke-width="3"></path>
+                                </svg>
+                            </div>
+                            <div class="text-[7px] text-gray-500 uppercase tracking-widest text-right">Win<br>Ratio</div>
+                        </div>
+                    </div>
+
+                    <!-- Player Card 4 -->
+                    <div class="bg-bgCard border border-borderSubtle rounded-xl p-3.5 flex flex-col justify-between h-40">
+                        <div class="flex items-center gap-2.5 mb-2">
+                            <img src="image_4.png" alt="Player" class="w-9 h-9 rounded bg-black object-cover border border-borderSubtle grayscale hover:grayscale-0 transition duration-300">
+                            <div>
+                                <h4 class="font-bold text-[10px] text-white uppercase">Player Name</h4>
+                                <p class="text-[8px] text-markhorEmerald mt-0.5 tracking-wider">DEF: 88</p>
+                            </div>
+                        </div>
+                        <div class="flex justify-around items-center flex-1">
+                            <div class="w-6 h-6 bg-borderSubtle rounded flex items-center justify-center text-[10px]">⚔️</div>
+                            <div class="w-6 h-6 bg-borderSubtle rounded flex items-center justify-center text-[10px]">🛡️</div>
+                            <div class="w-6 h-6 bg-borderSubtle rounded flex items-center justify-center text-[10px]">⭐</div>
+                        </div>
+                    </div>
+
+                </div>
+            </section>
+
+            <!-- Admin Broadcast Section with WhatsApp -->
+            <section class="bg-[#080808] border border-borderSubtle rounded-xl p-5 mt-6 relative overflow-hidden">
+                <div class="absolute top-0 right-0 w-16 h-16 bg-markhorGreen/5 rounded-bl-full pointer-events-none"></div>
+                <div class="text-[9px] font-bold text-gray-500 mb-4 uppercase tracking-widest">Admin Control Panel</div>
+                
+                <div class="space-y-3 relative z-10">
+                    <input type="text" id="admin-match-title" placeholder="Match Title (e.g. Markhor 11 vs Strikers)" class="w-full bg-black border border-borderSubtle rounded p-2.5 text-[10px] text-white focus:outline-none focus:border-markhorGreen transition">
+                    <input type="text" id="admin-match-date" placeholder="Date & Time (e.g. Sat, Oct 26 @ 7PM)" class="w-full bg-black border border-borderSubtle rounded p-2.5 text-[10px] text-white focus:outline-none focus:border-markhorGreen transition">
+                    
+                    <div class="flex gap-2 pt-2">
+                        <!-- Update App Button -->
+                        <button onclick="updateUI()" class="flex-1 bg-borderSubtle hover:bg-gray-800 text-white font-bold text-[9px] uppercase tracking-widest py-2.5 rounded transition">
+                            Update View
+                        </button>
+                        <!-- WhatsApp Broadcast Button -->
+                        <button onclick="broadcastWhatsApp()" class="flex-1 bg-markhorEmerald hover:bg-markhorGreen text-black font-bold text-[9px] uppercase tracking-widest py-2.5 rounded transition flex items-center justify-center gap-1.5">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="12" height="12" viewBox="0 0 24 24" fill="currentColor"><path d="M.057 24l1.687-6.163c-1.041-1.804-1.588-3.849-1.587-5.946.003-6.556 5.338-11.891 11.893-11.891 3.181.001 6.167 1.24 8.413 3.488 2.245 2.248 3.481 5.236 3.48 8.414-.003 6.557-5.338 11.892-11.893 11.892-1.99-.001-3.951-.5-5.688-1.448l-6.305 1.654zm6.597-3.807c1.676.995 3.276 1.591 5.392 1.592 5.448 0 9.898-4.45 9.898-9.892 0-2.64-1.027-5.119-2.894-6.985-1.864-1.866-4.346-2.895-6.986-2.895-5.452 0-9.898 4.451-9.898 9.892 0 1.954.516 3.82 1.493 5.485l-1.04 3.797 3.935-1.004zm10.741-7.464c-.058-.098-.216-.156-.453-.274-.236-.118-1.399-.691-1.615-.77-.216-.079-.374-.118-.531.118-.157.236-.61 .77-.748.928-.137.157-.275.177-.512.059-.236-.118-1-.368-1.905-1.177-.703-.628-1.177-1.404-1.315-1.64-.138-.236-.015-.364.103-.482.106-.106.236-.275.354-.413.118-.138.157-.236.236-.393.079-.157.039-.295-.02-.413-.059-.118-.531-1.278-.727-1.749-.191-.462-.385-.4-.531-.408-.138-.007-.295-.007-.453-.007-.157 0-.413.059-.629.295-.216.236-.826.806-.826 1.965 0 1.159.846 2.278.964 2.435.118.157 1.66 2.535 4.024 3.555 2.364 1.02 2.364.688 2.797.649.433-.039 1.399-.571 1.595-1.121.197-.55.197-1.023.138-1.121z"/></svg>
+                            WhatsApp Alert
+                        </button>
+                    </div>
+                </div>
+            </section>
+
+        </main>
+    </div>
+
+    <!-- Interactive Scripts -->
+    <script>
+        function updateUI() {
+            const title = document.getElementById('admin-match-title').value;
+            const date = document.getElementById('admin-match-date').value;
+            
+            if(title) document.getElementById('match-title-display').textContent = title;
+            if(date) document.getElementById('match-date-display').textContent = date;
+        }
+
+        function broadcastWhatsApp() {
+            const title = document.getElementById('admin-match-title').value || 'Upcoming Match';
+            const date = document.getElementById('admin-match-date').value || 'TBA';
+            
+            // Format the message for WhatsApp
+            const message = `🏏 *MARKHOR 11 MATCH ALERT* 🏏\n\n*Fixture:* ${title}\n*Date/Time:* ${date}\n\nSync your Google Calendar via the team app!`;
+            
+            // Open WhatsApp with pre-filled text
+            const whatsappUrl = `https://api.whatsapp.com/send?text=${encodeURIComponent(message)}`;
+            window.open(whatsappUrl, '_blank');
+        }
+    </script>
+</body>
+</html>
